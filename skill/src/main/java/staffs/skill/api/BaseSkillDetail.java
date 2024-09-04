@@ -9,5 +9,5 @@ public interface BaseSkillDetail {
 
     String name() ;
 
-    String category();
+    String proficiencyLevel();
 }

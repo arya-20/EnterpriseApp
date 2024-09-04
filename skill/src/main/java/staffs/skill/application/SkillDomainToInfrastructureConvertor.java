@@ -8,14 +8,13 @@ public class SkillDomainToInfrastructureConvertor {
     public static BaseSkill convert(Skill skill) {
         // Map the domain object to the infrastructure entity
         BaseSkill s = (BaseSkill) staffs.skill.infrastructure.Skill.skillOf(skill.id().toString(),
-                skill.name(),
-                skill.category());
+                skill.name(), skill.category());
 
         // Convert and add skill details (if any) to the infrastructure entity
-        for (staffs.skill.domain.SkillDetail skillDetailValueObject : skill.skillDetail()) {
-            s.addSkillDetail(new SkillDetail(skillDetailValueObject.getId(),
-                    skillDetailValueObject.getName(),
-                    skillDetailValueObject.getProficiencyLevel(),
+        for (staffs.skill.domain.SkillDetail skillDetailValueObject : skill.skillDetails()) {
+            s.addSkillDetail(new SkillDetail(skillDetailValueObject.id(),
+                    skillDetailValueObject.name(),
+                    skillDetailValueObject.proficiencyLevel(),
                     skill.id().toString()));
         }
         return s;

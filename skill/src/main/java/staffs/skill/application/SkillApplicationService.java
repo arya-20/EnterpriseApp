@@ -35,9 +35,9 @@ public class SkillApplicationService {
             // Convert skill details from the command to a list of SkillDetail objects
             List<SkillDetail> skillDetails = command.getSkillDetail().stream()
                     .map(skillDetail -> new SkillDetail(
-                            skillDetail.getId(),
-                            skillDetail.getName(),
-                            skillDetail.getProficiencyLevel()
+                            skillDetail.id(),
+                            skillDetail.name(),
+                            skillDetail.proficiencyLevel()
                     ))
                     .collect(Collectors.toList());
 

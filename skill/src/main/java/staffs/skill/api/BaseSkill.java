@@ -1,7 +1,7 @@
 package staffs.skill.api;
 
 
-import staffs.skill.domain.SkillDetail;
+import staffs.skill.infrastructure.SkillDetail;
 
 import java.util.List;
 

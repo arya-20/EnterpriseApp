@@ -6,5 +6,7 @@ public interface BaseSkillDetailValueObject {
 
     String getName();
 
-    String getCategory();
+    String getProficiencyLevel();
+
+    String getSkill_id();
 }

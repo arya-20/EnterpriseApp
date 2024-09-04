@@ -1,5 +1,7 @@
 package staffs.skill.infrastructure;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import staffs.skill.api.BaseSkillDetailValueObject;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,7 +11,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SkillDetail {
+public class SkillDetail implements BaseSkillDetailValueObject {
     @Id
     @SequenceGenerator(name = "skill_detail_sequence",
             sequenceName = "skill_detail_sequence_id",
@@ -25,6 +27,7 @@ public class SkillDetail {
     @Column(name = "proficiency_level")
     private String proficiencyLevel;
 
+    @JsonIgnore
     @Column(name = "skill_id")
-    private String skillId; // Reference to the related Skill
+    private String skill_id; // Reference to the related Skill
 }

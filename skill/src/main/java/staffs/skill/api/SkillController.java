@@ -17,13 +17,13 @@ public class SkillController {
     private SkillQueryHandler skillQueryHandler;
     private SkillApplicationService skillApplicationService;
 
-    // e.g. http://localhost:8900/skills/all
+    // e.g. http://localhost:8080/skills/all
     @GetMapping(path="/all")
     public Iterable<BaseSkill> findAll() {
         return skillQueryHandler.getAllSkills();
     }
 
-    // e.g. http://localhost:8900/skills/{skillId}
+    // e.g. http://localhost:8080/skills/{skillId}
     @GetMapping(path="/{skillId}")
     public ResponseEntity<GetSkillResponse> findById(@PathVariable String skillId) {
         return skillQueryHandler.getSkill(skillId).map(
@@ -31,7 +31,7 @@ public class SkillController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    //e.g. http://localhost:8900/skills/skillDetails/r1
+    //e.g. http://localhost:8080/skills/skillDetails/a
     @GetMapping(path="/skillDetails/{skillId}")
     public ResponseEntity<GetSkillDetailResponse> findSkillDetailsBySkillId(@PathVariable String skillId) {
         return skillQueryHandler.getSkillDetailResponse(skillId).map(
@@ -39,7 +39,7 @@ public class SkillController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    // e.g. POST http://localhost:8901/skills
+    // e.g. POST http://localhost:8080/skills
     /**
      {
      "skillName": "Java Programming",

@@ -12,7 +12,7 @@ public class SkillInfrastructureToDomainConvertor {
     public static Skill convert(BaseSkill skill) {
         // Convert all skill details from infrastructure to domain
         List<SkillDetail> skillDetails = new ArrayList<>();
-        for (SkillDetail skillDetailValueObject : skill.getSkillDetails()) {
+        for (staffs.skill.infrastructure.SkillDetail skillDetailValueObject : skill.getSkillDetails()) {
             skillDetails.add(new SkillDetail(
                     skillDetailValueObject.getId(),
                     skillDetailValueObject.getName(),
