@@ -1,19 +1,20 @@
 package staffs.staffskill.infrastructure;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import staffs.staffskill.api.BaseStaff;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "staff")
 @Table(name = "staff")
 @ToString
 @Getter
 @Setter
-public class Staff {
+public class Staff implements BaseStaff {
     @Id
     @Column(name = "staff_id")
     private String id;
@@ -27,6 +28,9 @@ public class Staff {
     @Column(name = "role")
     private String role;
 
+    @OneToMany(mappedBy = "staff_skill_id", cascade = {CascadeType.ALL})
+    private List<StaffSkill> staffSkills;
+
 
     protected Staff() {}
 
@@ -35,8 +39,11 @@ public class Staff {
         this.fullName = fullName;
         this.managerId = managerId;
         this.role = role;
+        this.staffSkills = new ArrayList<>();
     }
 
+    public void addStaffSkill(StaffSkill staffSkill) {staffSkills.add(staffSkill);
+    }
     // Factory method
     public static Staff staffOf(String id, String fullName, String managerId, String role) {
         return new Staff(id, fullName, managerId, role);

@@ -1,7 +1,7 @@
-INSERT INTO staff (id, full_name, manager_id, role) VALUES
+INSERT INTO staff (staff_id, full_name, manager_id, role) VALUES
  ('201', 'John Doe', '301', 'Software Engineer'),
  ('202', 'Jane Smith', '302', 'Project Manager');
 
-INSERT INTO staff_skill (id, expiry, skill_id, skill_name, level_of_skill, staff_id, staff_full_name) VALUES
- ('1', '2025-12-31', '101', 'Java Programming', 'Expert', '201', 'John Doe'),
- ('2', '2024-06-30', '102', 'Project Management', 'Intermediate', '202', 'Jane Smith');
+INSERT INTO staff_skill (staff_skill_id, staff_skill_name, expiry, level_of_skill, staff_id, notes, staff_full_name) VALUES
+  ('1', 'Java Programming', '2025-12-31', 'Expert', '101', '201', 'John Doe'),
+  ('2', 'Project Management', '2024-06-30', 'Intermediate', '102', '202', 'Jane Smith');

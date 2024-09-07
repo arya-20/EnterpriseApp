@@ -1,17 +1,17 @@
 CREATE TABLE staff (
-                       id VARCHAR PRIMARY KEY,
-                       fullName VARCHAR PRIMARY KEY,
-                       managerId VARCHAR PRIMARY KEY,
-                       role VARCHAR PRIMARY KEY,
+                       staff_id VARCHAR PRIMARY KEY,
+                       full_name VARCHAR NOT NULL,
+                       manager_id VARCHAR NOT NULL,
+                       role VARCHAR NOT NULL
 );
 
 CREATE TABLE staff_skill (
-                        id VARCHAR PRIMARY KEY,
+                        staff_skill_id VARCHAR PRIMARY KEY,
+                        staff_skill_name VARCHAR NOT NULL,
                         expiry DATE,
-                        skillId VARCHAR NOT NULL,
-                        skillName VARCHAR NOT NULL,
-                        levelOfSkill VARCHAR NOT NULL,
-                        staffId VARCHAR NOT NULL,
+                        level_of_skill VARCHAR NOT NULL,
+                        staff_id VARCHAR NOT NULL,
                         notes TEXT,
-                        staffFullName VARCHAR
+                        staff_full_name VARCHAR,
+                        FOREIGN KEY (staff_id) REFERENCES staff(staff_id)
 );

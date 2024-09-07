@@ -23,7 +23,7 @@ public class SkillController {
         return skillQueryHandler.getAllSkills();
     }
 
-    // e.g. http://localhost:8080/skills/{skillId}
+    // e.g. http://localhost:8080/skills/s1
     @GetMapping(path="/{skillId}")
     public ResponseEntity<GetSkillResponse> findById(@PathVariable String skillId) {
         return skillQueryHandler.getSkill(skillId).map(
@@ -31,7 +31,7 @@ public class SkillController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    //e.g. http://localhost:8080/skills/skillDetails/a
+    //e.g. http://localhost:8080/skills/skillDetails/s1
     @GetMapping(path="/skillDetails/{skillId}")
     public ResponseEntity<GetSkillDetailResponse> findSkillDetailsBySkillId(@PathVariable String skillId) {
         return skillQueryHandler.getSkillDetailResponse(skillId).map(

@@ -1,86 +1,103 @@
 package staffs.staffskill.domain;
 
-import example.common.domain.Entity;
-import example.common.domain.Identity;
-import lombok.ToString;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import staffs.staffskill.api.BaseStaffSkill;
+import staffs.staffskill.application.events.StaffSkillCustomSerializer;
+import example.common.domain.ValueObject;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
-@ToString
-public class StaffSkill extends Entity {
+import java.util.Date;
 
-    public static StaffSkill staffSkillOf(Identity id,
-                                          String expiry,
-                                          String skillId,
-                                          String skillName,
-                                          String levelOfSkill,
-                                          String staffId,
-                                          String notes,
-                                          String staffFullName) {
-        return new StaffSkill(id, expiry, skillId, skillName, levelOfSkill, staffId, notes, staffFullName);
-    }
+@EqualsAndHashCode(callSuper = false)
+@NoArgsConstructor
+@JsonSerialize(using = StaffSkillCustomSerializer.class)
+public class StaffSkill extends ValueObject implements BaseStaffSkill {
 
-    private String expiry;
-    private String skillId;
+    private long id;
     private String skillName;
+    private Date expiryDate;
     private String levelOfSkill;
     private String staffId;
     private String notes;
     private String staffFullName;
 
-    public StaffSkill(Identity id,
-                      String expiry,
-                      String skillId,
-                      String skillName,
-                      String levelOfSkill,
-                      String staffId,
-                      String notes,
-                      String staffFullName) {
-        super(id);
-        setExpiry(expiry);
-        setSkillId(skillId);
+    // Constructor
+    public StaffSkill(long id, String skillName, Date expiryDate, String levelOfSkill, String staffId, String notes) {
+        setId(id);
         setSkillName(skillName);
+        setExpiryDate(expiryDate);
         setLevelOfSkill(levelOfSkill);
         setStaffId(staffId);
         setNotes(notes);
         setStaffFullName(staffFullName);
     }
 
-    public String expiry() {return expiry;}
-    private void setExpiry(String expiry) {
-        this.expiry = expiry;
+    // Getters
+    public long id() {
+        return id;
     }
 
-    public String skillId() {return skillId;}
-    private void setSkillId(String skillId) {
-        assertArgumentNotEmpty(skillId, "Skill ID cannot be empty");
-        this.skillId = skillId;
+    public String skillName() {
+        return skillName;
     }
 
-    public String skillName() {return skillName;}
+    public Date expiryDate() {
+        return expiryDate;
+    }
+
+    public String levelOfSkill() {
+        return levelOfSkill;
+    }
+
+    public String notes() {
+        return notes;
+    }
+
+    public String staffId() {
+        return staffId;
+    }
+
+    public String staffFullName() {
+        return staffFullName;
+    }
+
+    // Private Setters
+    private void setId(long id) {
+        assertArgumentNotEmpty(id, "ID cannot be empty");
+        this.id = id;
+    }
+
     private void setSkillName(String skillName) {
-        assertArgumentNotEmpty(skillName, "Skill name cannot be empty");
+        assertArgumentNotEmpty(skillName, "Skill Name cannot be empty");
         this.skillName = skillName;
     }
 
-    public String levelOfSkill() {return levelOfSkill;}
+    private void setExpiryDate(Date expiryDate) {
+        this.expiryDate = expiryDate != null ? expiryDate : new Date();
+    }
+
     private void setLevelOfSkill(String levelOfSkill) {
-        assertArgumentNotEmpty(levelOfSkill, "Level of skill cannot be empty");
+        assertArgumentNotEmpty(levelOfSkill, "Level of Skill cannot be empty");
         this.levelOfSkill = levelOfSkill;
     }
 
-    public String staffId() {return staffId;}
+    private void setNotes(String notes) {
+        this.notes = notes != null ? notes : "";
+    }
+
     private void setStaffId(String staffId) {
         assertArgumentNotEmpty(staffId, "Staff ID cannot be empty");
         this.staffId = staffId;
     }
 
-    public String notes() {return notes;}
-    private void setNotes(String notes) {
-        this.notes = notes;
+    private void setStaffFullName(String staffFullName) {
+        assertArgumentNotEmpty(staffFullName, "Staff Full Name cannot be empty");
+        this.staffFullName = staffFullName;
     }
 
-    public String staffFullName() {return staffFullName;}
-    private void setStaffFullName(String staffFullName) {
-        assertArgumentNotEmpty(staffFullName, "Staff name cannot be empty");
-        this.staffFullName = staffFullName;
+    public String toString() {
+        return String.format("id=%s, skillName=%s, expiryDate=%s, levelOfSkill=%s, staffId=%s, notes=%s, staffFullName=%s",
+                id, skillName, expiryDate, levelOfSkill, staffId, notes, staffFullName);
     }
 }
