@@ -1,5 +1,6 @@
 package staffs.staffskill.infrastructure;
 
+import example.common.domain.FullName;
 import staffs.staffskill.api.BaseStaff;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -19,8 +20,8 @@ public class Staff implements BaseStaff {
     @Column(name = "staff_id")
     private String id;
 
-    @Column(name = "staff_full_name")
-    private String fullName;
+    @Embedded
+    private FullName fullName;
 
     @Column(name = "manager_id")
     private String managerId;
@@ -28,13 +29,13 @@ public class Staff implements BaseStaff {
     @Column(name = "role")
     private String role;
 
-    @OneToMany(mappedBy = "staff_skill_id", cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "staff_id", cascade = {CascadeType.ALL})
     private List<StaffSkill> staffSkills;
 
 
     protected Staff() {}
 
-    protected Staff(String id, String fullName, String managerId, String role) {
+    protected Staff(String id, FullName fullName, String managerId, String role) {
         this.id = id;
         this.fullName = fullName;
         this.managerId = managerId;
@@ -44,8 +45,14 @@ public class Staff implements BaseStaff {
 
     public void addStaffSkill(StaffSkill staffSkill) {staffSkills.add(staffSkill);
     }
+
     // Factory method
-    public static Staff staffOf(String id, String fullName, String managerId, String role) {
+    public static Staff staffOf(String id, FullName fullName, String managerId, String role) {
         return new Staff(id, fullName, managerId, role);
+    }
+
+    @Override
+    public FullName getFullName() {
+        return this.fullName;
     }
 }

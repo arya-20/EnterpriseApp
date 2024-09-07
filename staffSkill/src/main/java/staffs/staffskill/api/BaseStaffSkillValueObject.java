@@ -9,6 +9,6 @@ public interface BaseStaffSkillValueObject {
     String getLevelOfSkill();
     String getNotes();
     String getStaffFullName();
-    String getStaffId();
+    String getStaff_id();
 
 }

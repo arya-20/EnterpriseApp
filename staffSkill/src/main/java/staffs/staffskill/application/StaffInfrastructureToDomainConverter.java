@@ -19,8 +19,7 @@ public class StaffInfrastructureToDomainConverter {
                     staffSkillValueObject.getExpiry(),
                     staffSkillValueObject.getLevelOfSkill(),
                     staffSkillValueObject.getNotes(),
-                    staffSkillValueObject.getStaffFullName()
-            ));
+                    staffSkillValueObject.getStaffFullName()));
         }
 
         // Map to domain

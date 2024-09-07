@@ -3,7 +3,10 @@ package staffs.staffskill.application;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import staffs.staffskill.api.BaseStaff;
+import staffs.staffskill.api.GetStaffResponse;
+import staffs.staffskill.api.GetStaffSkillResponse;
 import staffs.staffskill.infrastructure.StaffRepository;
+import org.modelmapper.ModelMapper;
 
 import java.util.Optional;
 
@@ -16,15 +19,15 @@ public class StaffQueryHandler {
 
     public Optional<GetStaffResponse> getStaff(String staffId) {
         return staffRepository.findById(staffId).map(staff ->
-                modelMapper.map(staff, GetstaffResponse.class));
+                modelMapper.map(staff, GetStaffResponse.class));
     }
 
     public Iterable<BaseStaff> getAllStaff() {
         return staffRepository.findAllStaff();
     }
 
-    public Optional<GetStaffStaffSkillResponse> getStaffStaffskill(String staffId) {
+    public Optional<GetStaffSkillResponse> getStaffskill(String staffId) {
         return staffRepository.findById(staffId).map(staff ->
-                modelMapper.map(staff, GetStaffStaffSkillResponse.class));
+                modelMapper.map(staff, GetStaffSkillResponse.class));
     }
 }

@@ -7,7 +7,7 @@ import staffs.staffskill.domain.StaffSkill;
 public class StaffDomainToInfrastructureConverter {
     public static BaseStaff convert(Staff staff) {
         BaseStaff s = staffs.staffskill.infrastructure.Staff.staffOf(staff.id().toString(),
-                staff.fullName().toString(),
+                staff.fullName(),
                 staff.managerId(),
                 staff.role());
 

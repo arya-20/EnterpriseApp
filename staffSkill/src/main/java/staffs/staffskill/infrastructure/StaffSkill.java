@@ -42,6 +42,7 @@ public class StaffSkill implements BaseStaffSkillValueObject {
 
     @JsonIgnore //not displayed in list when JSONing menu items
     @Column(name="staff_id")
-    private String staffId;
+    private String staff_id;
+
 }
 

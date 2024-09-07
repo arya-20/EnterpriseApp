@@ -6,7 +6,7 @@ CREATE TABLE staff (
 );
 
 CREATE TABLE staff_skill (
-                        staff_skill_id VARCHAR PRIMARY KEY,
+                        staff_skill_id LONG PRIMARY KEY,
                         staff_skill_name VARCHAR NOT NULL,
                         expiry DATE,
                         level_of_skill VARCHAR NOT NULL,
