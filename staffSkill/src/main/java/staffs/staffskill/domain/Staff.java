@@ -3,7 +3,7 @@ package staffs.staffskill.domain;
 import example.common.domain.Entity;
 import example.common.domain.FullName;
 import example.common.domain.Identity;
-import staffs.staffskill.application.events.StaffCreatedEvent;
+import staffs.staffskill.api.events.StaffCreatedEvent;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,4 +1,4 @@
-package staffs.staffskill.application.events;
+package staffs.staffskill.api.events;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;

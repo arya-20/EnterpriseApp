@@ -1,4 +1,4 @@
-package staffs.staffskill.application.events;
+package staffs.staffskill.api.events;
 
 import example.common.domain.AggregateEvent;
 import lombok.AllArgsConstructor;

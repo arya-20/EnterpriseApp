@@ -25,3 +25,8 @@ public class IdentityController {
                 .body("Invalid details provided"));
     }
 }
+// Post req to http://localhost:9000/validate
+//{
+//    "username": "manager",
+//    "password": "password"
+//}

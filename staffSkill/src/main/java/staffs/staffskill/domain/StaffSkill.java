@@ -2,7 +2,7 @@ package staffs.staffskill.domain;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import staffs.staffskill.api.BaseStaffSkill;
-import staffs.staffskill.application.events.StaffSkillCustomSerializer;
+import staffs.staffskill.api.events.StaffSkillCustomSerializer;
 import example.common.domain.ValueObject;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;

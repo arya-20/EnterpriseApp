@@ -42,12 +42,21 @@ public class StaffController {
     /** POST: Create a new staff member with skills, e.g.
      POST http://localhost:8900/staff
      {
-     "fullName": "John Doe",
-     "role": "Developer",
+     "fullName": {
+     "firstName": "Tony",
+     "lastName": "Stark"
+     },
+     "managerId": "m12345",
+     "role": "Software Engineer",
      "staffSkills": [
-     {"name": "Java", "levelOfSkill": 4, "expiryDate": "2025-12-31"}
+     {
+     "id": "1",
+     "skillName": "Java Programming",
+     "proficiencyLevel": "Advanced"
+     }
      ]
      }
+
      **/
     @PostMapping
     public ResponseEntity<String> createStaffWithSkills(@RequestBody CreateStaffCommand command) {
@@ -60,6 +69,3 @@ public class StaffController {
         }
     }
 }
-
-
-//add endpoints

@@ -1,4 +1,4 @@
-package staffs.staffskill.application.events;
+package staffs.staffskill.api.events;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -6,8 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.stereotype.Component;
-
-import static org.hibernate.id.SequenceMismatchStrategy.LOG;
 
 @Component
 public class StaffCreatedListener {

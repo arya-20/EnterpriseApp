@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import staffs.skill.api.BaseSkillDetail;
-import staffs.skill.application.events.SkillDetailCustomSerializer;
+import staffs.skill.api.events.SkillDetailCustomSerializer;
 
 @EqualsAndHashCode(callSuper = false)
 @Setter

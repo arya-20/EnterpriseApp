@@ -2,7 +2,7 @@ package staffs.skill.domain;
 
 import example.common.domain.Entity;
 import example.common.domain.Identity;
-import staffs.skill.application.events.SkillCreatedEvent;
+import staffs.skill.api.events.SkillCreatedEvent;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 //methods to create attributes
 public class Skill extends Entity {
-    private final List<SkillDetail> skillDetails;
+    private List<SkillDetail> skillDetails;
     private String name;
     private String category;
 
@@ -59,4 +59,5 @@ public class Skill extends Entity {
 
         return String.format("\nSkill: %s, Name: %s, skill details \n[%s]", id(), name, skillDetailsAsString);
     }
+
 }

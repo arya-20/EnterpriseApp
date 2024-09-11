@@ -78,4 +78,5 @@ public class SkillApplicationService {
             LOG.error(e.getMessage());
         }
     }
+
 }

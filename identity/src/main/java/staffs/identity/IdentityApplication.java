@@ -1,19 +1,17 @@
-package staffs.skill;
+package staffs.identity;
 
-import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 
-@ComponentScan(basePackages = { "staffs.*", "example.*" })
-@EntityScan(basePackages = {"staffs.*", "example.*"})
-@EnableRabbit
+@ComponentScan(basePackages = { "staffs.*", "example.*" }) //To locate JWTTokenUtil in common
+@EntityScan(basePackages = {"staffs.*", "example.*"})//To locate AppUser in common
 @SpringBootApplication
-public class SkillApplication {
+public class IdentityApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SkillApplication.class, args);
+        SpringApplication.run(IdentityApplication.class, args);
     }
 
 }
