@@ -1,6 +1,5 @@
 package example.restaurant.api;
 
-import example.common.domain.Address;
 import example.restaurant.domain.MenuItem;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

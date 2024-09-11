@@ -11,6 +11,7 @@
         <option value="$PROJECT_DIR$/skill/pom.xml" />
         <option value="$PROJECT_DIR$/Staff/pom.xml" />
         <option value="$PROJECT_DIR$/staffSkill/pom.xml" />
+        <option value="$PROJECT_DIR$/identity/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

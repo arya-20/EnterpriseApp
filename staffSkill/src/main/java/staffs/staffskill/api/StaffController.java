@@ -17,13 +17,13 @@ public class StaffController {
     private StaffQueryHandler staffQueryHandler;
     private StaffApplicationService staffApplicationService;
 
-    // Get all staff members, e.g. http://localhost:8080/staff/all
+    // Get all staff members, e.g. http://localhost:8900/staff/all
     @GetMapping(path = "/all")
     public Iterable<BaseStaff> findAll() {
         return staffQueryHandler.getAllStaff();
     }
 
-    // Get a specific staff member by ID, e.g. http://localhost:8080/staff/{staffId}
+    // Get a specific staff member by ID, e.g. http://localhost:8900/staff/{staffId}
     @GetMapping(path = "/{staffId}")
     public ResponseEntity<GetStaffResponse> findById(@PathVariable String staffId) {
         return staffQueryHandler.getStaff(staffId).map(
@@ -31,7 +31,7 @@ public class StaffController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    // Get all skills for a staff member by their ID, e.g. http://localhost:8080/staff/skills/{staffId}
+    // Get all skills for a staff member by their ID, e.g. http://localhost:8900/staff/skills/{staffId}
     @GetMapping(path = "/skills/{staffId}")
     public ResponseEntity<GetStaffSkillResponse> findSkillsByStaffId(@PathVariable String staffId) {
         return staffQueryHandler.getStaffskill(staffId).map(
@@ -40,7 +40,7 @@ public class StaffController {
     }
 
     /** POST: Create a new staff member with skills, e.g.
-     POST http://localhost:8901/staff
+     POST http://localhost:8900/staff
      {
      "fullName": "John Doe",
      "role": "Developer",

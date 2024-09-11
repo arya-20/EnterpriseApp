@@ -1,7 +1,6 @@
 package staffs.skill.application;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import example.common.domain.AggregateEvent;
 import example.common.domain.Identity;
 import example.common.domain.UniqueIDFactory;
 import staffs.skill.api.BaseSkill;

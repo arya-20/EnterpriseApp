@@ -3,7 +3,6 @@ package example.restaurant.domain;
 import example.common.domain.Entity;
 import example.common.domain.Identity;
 import example.restaurant.application.events.RestaurantCreatedEvent;
-import lombok.Getter;
 
 import java.util.List;
 import java.util.Optional;

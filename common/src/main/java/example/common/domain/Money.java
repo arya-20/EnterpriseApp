@@ -1,7 +1,5 @@
 package example.common.domain;
 
-import lombok.Getter;
-
 import java.math.BigDecimal;
 import java.util.Objects;
 public class Money extends ValueObject {

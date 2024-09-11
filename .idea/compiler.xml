@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="common" />
         <module name="staffSkill" />
+        <module name="identity" />
         <module name="restaurant" />
         <module name="skill" />
       </profile>
@@ -22,6 +23,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="common" options="-parameters" />
+      <module name="identity" options="-parameters" />
       <module name="master" options="-parameters" />
       <module name="order" options="-parameters" />
       <module name="restaurant" options="-parameters" />

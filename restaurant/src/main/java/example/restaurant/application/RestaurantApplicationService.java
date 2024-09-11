@@ -1,11 +1,9 @@
 package example.restaurant.application;
 
-import example.common.domain.AggregateEvent;
 import example.common.domain.UniqueIDFactory;
 import example.restaurant.api.BaseRestaurant;
 import org.springframework.core.env.Environment;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import example.common.domain.Identity;
 import example.common.domain.Money;
 import example.restaurant.api.CreateRestaurantCommand;
