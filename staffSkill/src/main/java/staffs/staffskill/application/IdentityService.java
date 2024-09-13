@@ -1,10 +1,9 @@
-package staffs.skill.application;
+package staffs.staffskill.application;
 
 import example.common.application.JwtTokenUtil;
 import io.jsonwebtoken.JwtException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
 @Service
 @AllArgsConstructor
 public class IdentityService {
@@ -19,7 +18,7 @@ public class IdentityService {
     public boolean isAdmin(String token) throws JwtException{
         checkIfTokenHasExpired(token);
         String roleFound = jwtTokenUtil.getClaimFromToken(token, UserDTO.ROLE);
-        System.out.println (roleFound);
+        //Role is stored as {key=value} due to the custom serializer - so we use contains rather than equals
         return roleFound.contains("ADMIN");
     }
 
@@ -31,12 +30,12 @@ public class IdentityService {
 
     public UserDTO getDetailsFromToken(String token){
         return new UserDTO(jwtTokenUtil.getClaimFromToken(token, UserDTO.ID),
-                            jwtTokenUtil.getClaimFromToken(token, UserDTO.USERNAME),
-                            jwtTokenUtil.getClaimFromToken(token, UserDTO.PASSWORD),
-                            jwtTokenUtil.getClaimFromToken(token, UserDTO.ADDRESS),
-                            jwtTokenUtil.getClaimFromToken(token, UserDTO.FIRST_NAME),
-                            jwtTokenUtil.getClaimFromToken(token, UserDTO.SURNAME),
-                            jwtTokenUtil.getClaimFromToken(token, UserDTO.ROLE)
+                jwtTokenUtil.getClaimFromToken(token, UserDTO.USERNAME),
+                jwtTokenUtil.getClaimFromToken(token, UserDTO.PASSWORD),
+                jwtTokenUtil.getClaimFromToken(token, UserDTO.ADDRESS),
+                jwtTokenUtil.getClaimFromToken(token, UserDTO.FIRST_NAME),
+                jwtTokenUtil.getClaimFromToken(token, UserDTO.SURNAME),
+                jwtTokenUtil.getClaimFromToken(token, UserDTO.ROLE)
         );
     }
 }

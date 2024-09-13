@@ -1,10 +1,10 @@
-insert into role (type) values ('STAFF');
-insert into role (type) values ('MANAGER');
--- insert into role (type) values ('ADMIN');
+insert into role (type) values ('USER');
+-- insert into role (type) values ('MANAGER');
+insert into role (type) values ('ADMIN');
 
 insert into app_user (id, username, password, first_name, surname, address, role_id)
 values ('0000',
-        'staff',
+        'user',
         'password',
         'first1',
         'surname1',
@@ -13,18 +13,18 @@ values ('0000',
 
 insert into app_user (id, username,password, first_name, surname, address, role_id)
 values ('0001',
-        'manager',
+        'admin',
         'password',
         'first2',
         'surname2',
         '5, java road',
         2);
 
-insert into app_user (id, username,password, first_name, surname, address, role_id)
-values ('0002',
-        'admin',
-        'password',
-        'first2',
-        'surname2',
-        '93, monaco',
-        2);
+-- insert into app_user (id, username,password, first_name, surname, address, role_id)
+-- values ('0002',
+--         'admin',
+--         'password',
+--         'first2',
+--         'surname2',
+--         '93, monaco',
+--         3);
