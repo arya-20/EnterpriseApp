@@ -10,6 +10,9 @@ import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+
+@Profile("skill")
 @Configuration
 public class RabbitMQConfig {
     @Value("${rabbitmq.hostname}")
@@ -18,6 +21,8 @@ public class RabbitMQConfig {
     private String username;
     @Value("${rabbitmq.password}")
     private String password;
+
+
     @Bean //connection
     public ConnectionFactory getConnection(){
 // set up the connection

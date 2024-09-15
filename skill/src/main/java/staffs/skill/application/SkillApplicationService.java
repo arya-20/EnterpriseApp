@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,7 +44,7 @@ public class SkillApplicationService {
             // Create the Skill aggregate
             Skill skill = Skill.skillOf(idOfNewSkill,
                     command.getSkillName(),
-                    command.getCategory(),
+                    String.valueOf(command.getCategory()),
                     skillDetails);
 
             // Convert the aggregate to the infrastructure entity and save it
@@ -76,7 +77,7 @@ public class SkillApplicationService {
                     ))
                     .collect(Collectors.toList());
 
-            existingSkill.updateDetails(command.getSkillName(), command.getCategory(), updatedSkillDetails);
+            existingSkill.updateDetails(command.getSkillName(), String.valueOf(command.getCategory()), updatedSkillDetails);
 
             BaseSkill updatedSkillEntity = skillRepository.save(SkillDomainToInfrastructureConvertor.convert(existingSkill));
 
@@ -102,6 +103,15 @@ public class SkillApplicationService {
             // Consider saving to a local event store DB here as well
         } catch (JsonProcessingException e) {
             LOG.error(e.getMessage());
+        }
+    }
+
+    public void removeSkill(String skillId) throws SkillDomainException {
+        Optional<staffs.skill.infrastructure.Skill> skill = skillRepository.findById(skillId);
+        if (skill.isPresent()) {
+            skillRepository.deleteById(skillId); // Deletes the entity by its ID
+        } else {
+            throw new SkillDomainException("Skill not found");
         }
     }
 

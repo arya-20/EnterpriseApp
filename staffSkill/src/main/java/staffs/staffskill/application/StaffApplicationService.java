@@ -106,7 +106,6 @@ public class StaffApplicationService {
         }
     }
 
-    // In StaffApplicationService class
     public void removeStaff(String staffId) throws StaffDomainException {
         Optional<staffs.staffskill.infrastructure.Staff> staff = staffRepository.findById(staffId);
         if (staff.isPresent()) {

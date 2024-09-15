@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class IdentityService {
+public class SkillIdentityService {
     private JwtTokenUtil jwtTokenUtil;
 
     public boolean isSpecifiedUser(String token, String id) throws JwtException{

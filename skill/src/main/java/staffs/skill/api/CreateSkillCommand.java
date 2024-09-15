@@ -2,6 +2,7 @@ package staffs.skill.api;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import staffs.skill.domain.Category;
 import staffs.skill.domain.SkillDetail;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 public class CreateSkillCommand {
     private String skillName;
-    private String category;
+    private Category category;
     private List<SkillDetail> skillDetail;
 
     @Override

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import staffs.skill.api.BaseSkill;
+import staffs.skill.domain.Category;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,12 +29,13 @@ public class Skill implements BaseSkill {
     @OneToMany(mappedBy = "skill_id", cascade = {CascadeType.ALL})
     private List<SkillDetail> skillDetails;
 
+
     protected Skill() {}
 
     protected Skill(String id, String name, String category) {
         this.id = id;
         this.name = name;
-        this.category = category;
+        this.category = String.valueOf(category);
         this.skillDetails = new ArrayList<>();
     }
 

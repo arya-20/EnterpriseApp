@@ -10,6 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
 @EntityScan(basePackages = {"staffs.*", "example.*"})
 @EnableRabbit
 @SpringBootApplication
+
 public class SkillApplication {
 
     public static void main(String[] args) {

@@ -80,6 +80,22 @@ public class StaffController {
         return generateErrorResponse("user not authorised");
     }
 
+    // Get all staff assigned to skill by id, http://localhost:8900/staff/{staffSkillId}
+    @GetMapping(path = "/staff/{staffSkillId}")
+    public ResponseEntity<?> findBySkillId(@PathVariable String staffSkillId,
+                                           @RequestHeader("Authorization") String token) {
+        try {
+            if (identityService.isAdmin(token) || identityService.isSpecifiedUser(token, staffSkillId)) {
+                List<BaseStaffSkill> staffList = staffQueryHandler.getStaffByStaffSkills(staffSkillId);
+                return ResponseEntity.ok(staffList);
+            }
+        } catch (JwtException jwtException) {
+            return generateErrorResponse(jwtException.getMessage());
+        }
+        return generateErrorResponse("user not authorised");
+    }
+
+
 
     // Get all skills for a staff member by their ID, e.g. http://localhost:8900/staff/skills/{staffId}
     @GetMapping(path = "/skills/{staffId}")

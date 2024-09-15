@@ -7,8 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class GetSkillResponse {
+public class GetCategoryResponse {
     private String id;
     private String name;
-    private String category;
 }

@@ -1,22 +1,26 @@
 package staffs.skill.api;
 
 import io.jsonwebtoken.JwtException;
-import staffs.skill.application.IdentityService;
-import staffs.skill.application.SkillApplicationService;
-import staffs.skill.application.SkillQueryHandler;
-import staffs.skill.application.SkillDomainException;
+import staffs.skill.application.*;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.json.JsonParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import staffs.skill.domain.Category;
+import staffs.skill.infrastructure.Skill;
+
+import java.util.List;
+
 
 @RestController
 @AllArgsConstructor
 @RequestMapping(path = "/skills")
 public class SkillController {
-    private final IdentityService identityService;
+    private final SkillIdentityService identityService;
+    private final CategoryQueryHandler categoryQueryHandler;
+    private final CategoryApplicationService categoryApplicationService;
     private SkillQueryHandler skillQueryHandler;
     private SkillApplicationService skillApplicationService;
 
@@ -35,6 +39,22 @@ public class SkillController {
         return generateErrorResponse("user not authorised");
     }
 
+    // e.g. http://localhost:8080/categories/all
+    @GetMapping(path = "/all")
+    public ResponseEntity<?> findAllCategories(@RequestHeader("Authorization") String token) {
+        try {
+            if (identityService.isAdmin(token)) {
+                return ResponseEntity.ok().body(categoryQueryHandler.getAllCategories());
+            }
+        } catch (JwtException jwtException) {
+            return generateErrorResponse(jwtException.getMessage());
+
+        } catch (IllegalArgumentException iae) {
+        }
+        return generateErrorResponse("user not authorised");
+    }
+
+
 
     // e.g. http://localhost:8080/skills/s1
     @GetMapping(path = "/{skillId}")
@@ -51,6 +71,21 @@ public class SkillController {
         } catch (JwtException jwtException) {
             return generateErrorResponse(jwtException.getMessage());
         } catch (IllegalArgumentException iae) {
+        }
+        return generateErrorResponse("user not authorised");
+    }
+
+    // view all skills in a category e.g. http://localhost:8080/skills/category/{categoryId}
+    @GetMapping(path = "/category/{categoryId}")
+    public ResponseEntity<?> getSkillsByCategory(@PathVariable Category categoryId,
+                                             @RequestHeader("Authorization") String token) {
+        try {
+            if (identityService.isAdmin(token) || identityService.isSpecifiedUser(token, String.valueOf(categoryId))) {
+                List<Skill> skillList = skillQueryHandler.getSkillsByCategory(categoryId);
+                return ResponseEntity.ok(skillList);
+            }
+        } catch (JwtException jwtException) {
+            return generateErrorResponse(jwtException.getMessage());
         }
         return generateErrorResponse("user not authorised");
     }
@@ -108,6 +143,31 @@ public class SkillController {
         return generateErrorResponse("user not authorised");
     }
 
+
+//    {
+//        "name": "Programming"
+//    }
+    @PostMapping("/categories")
+    public ResponseEntity<?> createCategory(@RequestBody CreateCategoryCommand command,
+                                                    @RequestHeader("Authorization") String token) {
+        try {
+            //Valid ADMIN?
+            if (identityService.isAdmin(token)) {
+                return new ResponseEntity<>(categoryApplicationService.createCategory(command),
+                        HttpStatus.CREATED);
+            }
+        } catch (JwtException jwtException) {
+            return generateErrorResponse(jwtException.getMessage());
+        } catch (CategoryDomainException | JsonParseException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unable to create restaurant");
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred", e);
+        }
+        return generateErrorResponse("category not authorised");
+    }
+
+
+
     @PutMapping("/{skillId}")
     public ResponseEntity<?> updateSkillWithDetails(@PathVariable String skillId,
                                                     @RequestBody CreateSkillCommand command,
@@ -131,4 +191,71 @@ public class SkillController {
     private ResponseEntity<?> generateErrorResponse(String message) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);
     }
+
+
+
+    @PutMapping("/{categoryId}")
+    public ResponseEntity<?> updateCategory(@PathVariable String categoryId,
+                                                    @RequestBody CreateCategoryCommand command,
+                                                    @RequestHeader("Authorization") String token) {
+        try {
+            // Valid ADMIN?
+            if (identityService.isAdmin(token)) {
+                categoryApplicationService.updateCategory(categoryId, command);
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+        } catch (JwtException jwtException) {
+            return generateErrorResponse(jwtException.getMessage());
+        } catch (CategoryDomainException | JsonParseException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unable to update category");
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred", e);
+        }
+        return generateErrorResponse("User not authorized");
+    }
+
+
+
+
+    // e.g. DELETE http://localhost:8080/skills/s1
+    @DeleteMapping("/{skillId}")
+    public ResponseEntity<?> deleteSkill(@PathVariable String skillId,
+                                         @RequestHeader("Authorization") String token) {
+        try {
+            // Valid ADMIN?
+            if (identityService.isAdmin(token)) {
+                skillApplicationService.removeSkill(skillId);
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+        } catch (JwtException jwtException) {
+            return generateErrorResponse(jwtException.getMessage());
+        } catch (SkillDomainException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred", e);
+        }
+        return generateErrorResponse("User not authorized");
+    }
+
+
+    // e.g. DELETE http://localhost:8080/category/1
+    @DeleteMapping("/{categoryId}")
+    public ResponseEntity<?> deleteCategory(@PathVariable String categoryId,
+                                         @RequestHeader("Authorization") String token) {
+        try {
+            // Valid ADMIN?
+            if (identityService.isAdmin(token)) {
+                categoryApplicationService.removeCategory(categoryId);
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+        } catch (JwtException jwtException) {
+            return generateErrorResponse(jwtException.getMessage());
+        } catch (CategoryDomainException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred", e);
+        }
+        return generateErrorResponse("User not authorized");
+    }
+
 }

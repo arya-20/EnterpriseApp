@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import staffs.staffskill.api.BaseStaff;
+import staffs.staffskill.api.BaseStaffSkill;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +23,8 @@ public interface StaffRepository extends CrudRepository<Staff, String> {
     Optional<Staff> findById(String id);
 
     List<BaseStaff> findByManagerId(String managerId);
+
+//    List<BaseStaffSkill> findByStaffSkillId (String id);
 
 
 }
