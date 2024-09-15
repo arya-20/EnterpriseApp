@@ -2,6 +2,7 @@ package staffs.staffskill.application;
 
 import example.common.domain.Identity;
 import staffs.staffskill.api.BaseStaff;
+import staffs.staffskill.api.BaseStaffSkill;
 import staffs.staffskill.domain.Staff;
 import staffs.staffskill.domain.StaffSkill;
 
@@ -10,7 +11,7 @@ import java.util.List;
 
 public class StaffInfrastructureToDomainConverter {
     public static Staff convert(BaseStaff staff) {
-        List<StaffSkill> staffSkills = new ArrayList<>();
+        List<BaseStaffSkill> staffSkills = new ArrayList<>();
 
         for (staffs.staffskill.infrastructure.StaffSkill staffSkillValueObject : staff.getStaffSkills()) {
             staffSkills.add(new StaffSkill(
@@ -18,8 +19,8 @@ public class StaffInfrastructureToDomainConverter {
                     staffSkillValueObject.getName(),
                     staffSkillValueObject.getExpiry(),
                     staffSkillValueObject.getLevelOfSkill(),
-                    staffSkillValueObject.getNotes(),
-                    staffSkillValueObject.getStaffFullName()));
+                    staffSkillValueObject.getStaff_id(),
+                    staffSkillValueObject.getNotes()));
         }
 
         // Map to domain

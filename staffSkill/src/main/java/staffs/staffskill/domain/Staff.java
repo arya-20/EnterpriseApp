@@ -1,8 +1,8 @@
 package staffs.staffskill.domain;
 
 import example.common.domain.Entity;
-import example.common.domain.FullName;
 import example.common.domain.Identity;
+import staffs.staffskill.api.BaseStaffSkill;
 import staffs.staffskill.api.events.StaffCreatedEvent;
 
 import java.util.List;
@@ -10,30 +10,35 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Staff extends Entity {
-    private final List<StaffSkill> staffSkills;
-    private FullName fullName;
+    private List<BaseStaffSkill> staffSkills;
+    private String fullName;
     private String managerId;
     private String role;
 
     // Factory method
-    public static Staff staffOf(Identity id, FullName fullName, String managerId, String role, List<StaffSkill> staffSkills) {
+    public static Staff staffOf(Identity id, String fullName, String managerId, String role, List<BaseStaffSkill> staffSkills) {
         return new Staff(id, fullName, managerId, role, staffSkills);
     }
 
-    public Staff(Identity id, FullName fullName, String managerId, String role, List<StaffSkill> staffSkills) {
+    public Staff(Identity id, String fullName, String managerId, String role, List<BaseStaffSkill> staffSkills) {
         super(id);
         setFullName(fullName);
         setManagerId(managerId);
         setRole(role);
-        this.staffSkills = staffSkills;
+        setStaffSkills(staffSkills);
 
         // Store event
-        event = Optional.of(new StaffCreatedEvent(id.toString(), fullName.toString(), managerId, role, staffSkills));
+        event = Optional.of(new StaffCreatedEvent(id.toString(), fullName, managerId, role, staffSkills));
     }
 
-    public FullName fullName() {return fullName;}
+    public String fullName() {return fullName;}
 
-    private void setFullName(FullName fullName) {
+    private void setStaffSkills (List<BaseStaffSkill> staffSkills) {
+        assertArgumentNotEmpty(staffSkills, "staff skills can not be empty");
+        this.staffSkills = staffSkills;
+    }
+
+    private void setFullName(String fullName) {
         assertArgumentNotEmpty(fullName, "Name cannot be empty");
         this.fullName = fullName;
     }
@@ -52,13 +57,12 @@ public class Staff extends Entity {
         this.role = role;
     }
 
-    public List<StaffSkill> staffSkills() {return staffSkills;}
+    public List<BaseStaffSkill> staffSkills() {return staffSkills;}
 
     public boolean findStaffSkill(long staffSkillId) {
         return staffSkills.stream()
                 .anyMatch(staffSkill -> staffSkill.id() == staffSkillId);
     }
-
 
     public String toString() {
         String staffSkillsAsString = staffSkills.stream()

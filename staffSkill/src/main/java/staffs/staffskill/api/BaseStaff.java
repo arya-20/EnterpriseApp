@@ -1,6 +1,5 @@
 package staffs.staffskill.api;
 
-import example.common.domain.FullName;
 import staffs.staffskill.infrastructure.StaffSkill;
 
 import java.util.List;
@@ -8,7 +7,7 @@ import java.util.List;
 public interface BaseStaff {
         String getId();
 
-        FullName getFullName();
+        String getFullName();
 
         String getManagerId();
 

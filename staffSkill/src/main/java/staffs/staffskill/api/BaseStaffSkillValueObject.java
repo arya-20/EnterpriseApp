@@ -8,7 +8,6 @@ public interface BaseStaffSkillValueObject {
     Date getExpiry();
     String getLevelOfSkill();
     String getNotes();
-    String getStaffFullName();
     String getStaff_id();
 
 }

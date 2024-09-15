@@ -78,18 +78,11 @@ public class StaffController {
     /** POST: Create a new staff member with skills, e.g.
      POST http://localhost:8900/staff
      {
-     "fullName": {
-     "firstName": "Tony",
-     "lastName": "Stark"
-     },
-     "managerId": "m12345",
+     "fullName": "Tony Stark",
+     "managerId": "301",
      "role": "Software Engineer",
      "staffSkills": [
-     {
-     "id": "1",
-     "skillName": "Java Programming",
-     "proficiencyLevel": "Advanced"
-     }
+     { "id": "5", "skillName": "Java Programming", "proficiencyLevel": "Advanced", "expiryDate": "2024-09-15", "levelOfSkill": "Expert", "notes": "..."}
      ]
      }
 
@@ -108,7 +101,7 @@ public class StaffController {
             return generateErrorResponse(jwtException.getMessage());
         }
         catch(StaffDomainException | JsonParseException e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unable to create restaurant");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unable to create staff member");
         }
         catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred", e);

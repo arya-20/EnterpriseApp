@@ -1,8 +1,9 @@
 package staffs.staffskill.application;
 
 import staffs.staffskill.api.BaseStaff;
+import staffs.staffskill.api.BaseStaffSkill;
 import staffs.staffskill.domain.Staff;
-import staffs.staffskill.domain.StaffSkill;
+import staffs.staffskill.infrastructure.StaffSkill;
 
 public class StaffDomainToInfrastructureConverter {
     public static BaseStaff convert(Staff staff) {
@@ -11,14 +12,14 @@ public class StaffDomainToInfrastructureConverter {
                 staff.managerId(),
                 staff.role());
 
-        for(StaffSkill staffSkillValueObject : staff.staffSkills()) {
-            s.addStaffSkill(new staffs.staffskill.infrastructure.StaffSkill(staffSkillValueObject.id(),
+        for(BaseStaffSkill staffSkillValueObject : staff.staffSkills()) {
+            StaffSkill staffSkill = new StaffSkill(staffSkillValueObject.id(),
                     staffSkillValueObject.skillName(),
                     staffSkillValueObject.expiryDate(),
                     staffSkillValueObject.levelOfSkill(),
                     staffSkillValueObject.notes(),
-                    staffSkillValueObject.staffId(),
-                    staffSkillValueObject.staffFullName()));
+                    staffSkillValueObject.staffId());
+            s.addStaffSkill(staffSkill);
         }
         return s;
     }

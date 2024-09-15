@@ -37,9 +37,6 @@ public class StaffSkill implements BaseStaffSkillValueObject {
     @Column(name="notes")
     private String notes;
 
-    @Column(name="staff_full_name")
-    private String staffFullName;
-
     @JsonIgnore //not displayed in list when JSONing menu items
     @Column(name="staff_id")
     private String staff_id;

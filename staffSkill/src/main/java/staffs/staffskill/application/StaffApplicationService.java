@@ -10,6 +10,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import staffs.staffskill.api.BaseStaff;
+import staffs.staffskill.api.BaseStaffSkill;
 import staffs.staffskill.api.CreateStaffCommand;
 import staffs.staffskill.domain.Staff;
 import staffs.staffskill.domain.StaffSkill;
@@ -31,7 +32,7 @@ public class StaffApplicationService {
         try {
             Identity idOfNewStaff = UniqueIDFactory.createID();
             // Convert staff skills from the command as we need to pass them to the aggregate constructor
-            List<StaffSkill> staffSkills = command.getStaffSkills().stream()
+            List<BaseStaffSkill> staffSkills = command.getStaffSkills().stream()
                     .map(staffSkill -> new StaffSkill(
                             -1,
                             staffSkill.skillName(),

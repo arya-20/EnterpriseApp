@@ -13,14 +13,12 @@ import java.util.Date;
 @NoArgsConstructor
 @JsonSerialize(using = StaffSkillCustomSerializer.class)
 public class StaffSkill extends ValueObject implements BaseStaffSkill {
-
     private long id;
     private String skillName;
     private Date expiryDate;
     private String levelOfSkill;
     private String staffId;
     private String notes;
-    private String staffFullName;
 
     // Constructor
     public StaffSkill(long id, String skillName, Date expiryDate, String levelOfSkill, String staffId, String notes) {
@@ -30,7 +28,6 @@ public class StaffSkill extends ValueObject implements BaseStaffSkill {
         setLevelOfSkill(levelOfSkill);
         setStaffId(staffId);
         setNotes(notes);
-        setStaffFullName(staffFullName);
     }
 
     // Getters
@@ -58,9 +55,6 @@ public class StaffSkill extends ValueObject implements BaseStaffSkill {
         return staffId;
     }
 
-    public String staffFullName() {
-        return staffFullName;
-    }
 
     // Private Setters
     private void setId(long id) {
@@ -91,13 +85,8 @@ public class StaffSkill extends ValueObject implements BaseStaffSkill {
         this.staffId = staffId;
     }
 
-    private void setStaffFullName(String staffFullName) {
-        assertArgumentNotEmpty(staffFullName, "Staff Full Name cannot be empty");
-        this.staffFullName = staffFullName;
-    }
-
     public String toString() {
-        return String.format("id=%s, skillName=%s, expiryDate=%s, levelOfSkill=%s, staffId=%s, notes=%s, staffFullName=%s",
-                id, skillName, expiryDate, levelOfSkill, staffId, notes, staffFullName);
+        return String.format("id=%s, skillName=%s, expiryDate=%s, levelOfSkill=%s, staffId=%s, notes=%s",
+                id, skillName, expiryDate, levelOfSkill, staffId, notes);
     }
 }
