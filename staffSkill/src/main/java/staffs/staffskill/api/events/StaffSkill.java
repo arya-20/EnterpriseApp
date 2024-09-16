@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Setter;
 import staffs.staffskill.api.BaseStaffSkill;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @AllArgsConstructor
@@ -17,7 +18,7 @@ import java.util.Date;
 public class StaffSkill implements BaseStaffSkill { //Need the interface to decouple event version in Restaurant factory method
     private long id;
     private String skillName;
-    private Date expiry;
+    private LocalDate expiry;
     private String levelOfSkill;
     private String staffId;
     private String notes;
@@ -28,7 +29,7 @@ public class StaffSkill implements BaseStaffSkill { //Need the interface to deco
         return skillName;
     }
 
-    public Date expiryDate() {
+    public LocalDate expiryDate() {
         return expiry;
     }
 

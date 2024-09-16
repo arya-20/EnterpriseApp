@@ -21,24 +21,23 @@ public class SkillController {
     private SkillApplicationService skillApplicationService;
 
     // e.g. http://localhost:8080/skills/all
-    @GetMapping(path="/all")
+    @GetMapping(path = "/all")
     public ResponseEntity<?> findAll(@RequestHeader("Authorization") String token) {
         try {
             if (identityService.isAdmin(token)) {
                 return ResponseEntity.ok().body(skillQueryHandler.getAllSkills());
             }
-        }
-        catch (JwtException jwtException){
+        } catch (JwtException jwtException) {
             return generateErrorResponse(jwtException.getMessage());
 
+        } catch (IllegalArgumentException iae) {
         }
-        catch (IllegalArgumentException iae) {}
         return generateErrorResponse("user not authorised");
     }
 
 
     // e.g. http://localhost:8080/skills/s1
-    @GetMapping(path="/{skillId}")
+    @GetMapping(path = "/{skillId}")
     public ResponseEntity<?> findById(@PathVariable String skillId,
                                       @RequestHeader("Authorization") String token) {
         try {
@@ -49,71 +48,87 @@ public class SkillController {
                                 o -> new ResponseEntity<>(o, HttpStatus.OK))
                         .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
             }
-        }
-        catch (JwtException jwtException){
+        } catch (JwtException jwtException) {
             return generateErrorResponse(jwtException.getMessage());
+        } catch (IllegalArgumentException iae) {
         }
-        catch (IllegalArgumentException iae) {}
         return generateErrorResponse("user not authorised");
     }
 
     //e.g. http://localhost:8080/skills/skillDetails/s1
-    @GetMapping(path="/skillDetails/{skillId}")
+    @GetMapping(path = "/skillDetails/{skillId}")
     public ResponseEntity<?> findSkillDetailBySkillId(@PathVariable String skillId,
-                                                    @RequestHeader("Authorization") String token) {
+                                                      @RequestHeader("Authorization") String token) {
         try {
             //Valid user or ADMIN?
-            if (identityService.isAdmin(token)||
+            if (identityService.isAdmin(token) ||
                     identityService.isSpecifiedUser(token, skillId)) {
                 return skillQueryHandler.getSkillDetailResponse(skillId).map(
                                 o -> new ResponseEntity<>(o, HttpStatus.OK))
                         .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
             }
-        }
-        catch (JwtException jwtException){
+        } catch (JwtException jwtException) {
             return generateErrorResponse(jwtException.getMessage());
+        } catch (IllegalArgumentException iae) {
         }
-        catch (IllegalArgumentException iae) {}
         return generateErrorResponse("user not authorised");
     }
 
     // e.g. POST http://localhost:8080/skills
+
     /**
-     {
-     "skillName": "Java Programming",
-     "category": "Technical",
-     "skillDetail": [
-     {
-     "id": "1",
-     "name": "OOP Principles",
-     "proficiencyLevel": "Advanced"
-     }
-     ]
-     }
+     * {
+     * "skillName": "Java Programming",
+     * "category": "Technical",
+     * "skillDetail": [
+     * {
+     * "id": "1",
+     * "name": "OOP Principles",
+     * "proficiencyLevel": "Advanced"
+     * }
+     * ]
+     * }
      **/
     @PostMapping
     public ResponseEntity<?> createSkillWithDetails(@RequestBody CreateSkillCommand command,
-                                                         @RequestHeader("Authorization") String token){
-            try{
-                //Valid ADMIN?
-                if(identityService.isAdmin(token)) {
-                    return new ResponseEntity<>(skillApplicationService.createSkillWithDetails(command),
-                            HttpStatus.CREATED);
-                }
+                                                    @RequestHeader("Authorization") String token) {
+        try {
+            //Valid ADMIN?
+            if (identityService.isAdmin(token)) {
+                return new ResponseEntity<>(skillApplicationService.createSkillWithDetails(command),
+                        HttpStatus.CREATED);
             }
-            catch (JwtException jwtException){
-                return generateErrorResponse(jwtException.getMessage());
-            }
-            catch(SkillDomainException | JsonParseException e){
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unable to create restaurant");
-            }
-            catch (Exception e) {
-                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred", e);
-            }
-            return generateErrorResponse("user not authorised");
+        } catch (JwtException jwtException) {
+            return generateErrorResponse(jwtException.getMessage());
+        } catch (SkillDomainException | JsonParseException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unable to create restaurant");
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred", e);
         }
-
-        private ResponseEntity<?> generateErrorResponse(String message){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);
-        }
+        return generateErrorResponse("user not authorised");
     }
+
+    @PutMapping("/{skillId}")
+    public ResponseEntity<?> updateSkillWithDetails(@PathVariable String skillId,
+                                                    @RequestBody CreateSkillCommand command,
+                                                    @RequestHeader("Authorization") String token) {
+        try {
+            // Valid ADMIN?
+            if (identityService.isAdmin(token)) {
+                skillApplicationService.updateSkillWithDetails(skillId, command);
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+        } catch (JwtException jwtException) {
+            return generateErrorResponse(jwtException.getMessage());
+        } catch (SkillDomainException | JsonParseException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unable to update skill");
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred", e);
+        }
+        return generateErrorResponse("User not authorized");
+    }
+
+    private ResponseEntity<?> generateErrorResponse(String message) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);
+    }
+}

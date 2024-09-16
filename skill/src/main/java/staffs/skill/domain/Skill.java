@@ -60,4 +60,11 @@ public class Skill extends Entity {
         return String.format("\nSkill: %s, Name: %s, skill details \n[%s]", id(), name, skillDetailsAsString);
     }
 
+    public void updateDetails(String skillName, String category, List<SkillDetail> skillDetails) {
+        this.name = skillName;
+        this.category = category;
+        this.skillDetails = skillDetails;
+    }
+
+
 }

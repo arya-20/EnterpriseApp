@@ -1,5 +1,6 @@
 package staffs.staffskill.api;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public interface BaseStaffSkill {
@@ -8,7 +9,7 @@ public interface BaseStaffSkill {
 
     String skillName();
 
-    Date expiryDate();
+    LocalDate expiryDate();
 
     String levelOfSkill();
 

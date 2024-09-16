@@ -12,6 +12,16 @@ import staffs.staffskill.application.StaffApplicationService;
 import staffs.staffskill.application.StaffDomainException;
 import staffs.staffskill.application.StaffQueryHandler;
 
+import java.util.List;
+
+//get all staff
+//get staff by id
+//get staff allocated to manager
+//get skills allocated to staff member
+//create new staff (not working)
+//update staff with details
+//delete staff
+
 @RestController
 @AllArgsConstructor
 @RequestMapping(path = "/staff")
@@ -55,6 +65,22 @@ public class StaffController {
         return generateErrorResponse("user not authorised");
     }
 
+    // Get a staff member allocated to manager ID, e.g. http://localhost:8900/staff/manager/{managerId}
+    @GetMapping(path = "/manager/{managerId}")
+    public ResponseEntity<?> findByManagerId(@PathVariable String managerId,
+                                             @RequestHeader("Authorization") String token) {
+        try {
+            if (identityService.isAdmin(token) || identityService.isSpecifiedUser(token, managerId)) {
+                List<BaseStaff> staffList = staffQueryHandler.getStaffByManagerId(managerId);
+                return ResponseEntity.ok(staffList);
+            }
+        } catch (JwtException jwtException) {
+            return generateErrorResponse(jwtException.getMessage());
+        }
+        return generateErrorResponse("user not authorised");
+    }
+
+
     // Get all skills for a staff member by their ID, e.g. http://localhost:8900/staff/skills/{staffId}
     @GetMapping(path = "/skills/{staffId}")
     public ResponseEntity<?> findSkillByStaffId(@PathVariable String staffId,
@@ -97,7 +123,7 @@ public class StaffController {
                         HttpStatus.CREATED);
             }
         }
-        catch (JwtException jwtException){
+        catch (JwtException jwtException) {
             return generateErrorResponse(jwtException.getMessage());
         }
         catch(StaffDomainException | JsonParseException e){
@@ -108,6 +134,44 @@ public class StaffController {
         }
         return generateErrorResponse("user not authorised");
     }
+
+    @PutMapping("/{staffId}")
+    public ResponseEntity<?> updateStaffWithDetails(@PathVariable String staffId,
+                                                    @RequestBody CreateStaffCommand command,
+                                                    @RequestHeader("Authorization") String token) {
+        try {
+            // Valid ADMIN?
+            if (identityService.isAdmin(token)) {
+                staffApplicationService.updateStaffWithDetails(staffId, command);
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+        } catch (JwtException jwtException) {
+            return generateErrorResponse(jwtException.getMessage());
+        } catch (StaffDomainException | JsonParseException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unable to update staff details");
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred", e);
+        }
+        return generateErrorResponse("User not authorized");
+    }
+
+    @DeleteMapping("/{staffId}")
+    public ResponseEntity<?> removeStaff(@PathVariable String staffId, @RequestHeader("Authorization") String token) {
+        try {
+            // Ensure only admins can delete staff
+            if (identityService.isAdmin(token)) {
+                staffApplicationService.removeStaff(staffId);
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+        } catch (JwtException jwtException) {
+            return generateErrorResponse(jwtException.getMessage());
+        } catch (StaffDomainException e) {
+            return generateErrorResponse("Unable to remove staff member");
+        }
+        return generateErrorResponse("User not authorized");
+    }
+
+
 
     private ResponseEntity<?> generateErrorResponse(String message){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);

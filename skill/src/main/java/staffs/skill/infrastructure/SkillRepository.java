@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface SkillRepository extends CrudRepository<Skill, String> {
     // Used in application service to avoid coupling of api to infrastructure layer
@@ -13,5 +15,8 @@ public interface SkillRepository extends CrudRepository<Skill, String> {
     Iterable<BaseSkill> findAllSkills();
 
     // Used in application service to avoid coupling of application layer to infrastructure layer
-    BaseSkill save(BaseSkill skill);
+    <S extends BaseSkill> S save(S skill);
+
+    // Find skill by ID
+    Optional<Skill> findById(String id);
 }

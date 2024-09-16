@@ -8,6 +8,7 @@ import staffs.staffskill.api.GetStaffSkillResponse;
 import staffs.staffskill.infrastructure.StaffRepository;
 import org.modelmapper.ModelMapper;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -29,5 +30,9 @@ public class StaffQueryHandler {
     public Optional<GetStaffSkillResponse> getStaffskill(String staffId) {
         return staffRepository.findById(staffId).map(staff ->
                 modelMapper.map(staff, GetStaffSkillResponse.class));
+    }
+
+    public List<BaseStaff> getStaffByManagerId(String managerId) {
+        return staffRepository.findByManagerId(managerId);
     }
 }

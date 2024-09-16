@@ -1,11 +1,11 @@
 package staffs.staffskill.api;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public interface BaseStaffSkillValueObject {
     long getId();
     String getName();
-    Date getExpiry();
+    LocalDate getExpiry();
     String getLevelOfSkill();
     String getNotes();
     String getStaff_id();

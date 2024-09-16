@@ -7,7 +7,7 @@ import example.common.domain.ValueObject;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
@@ -15,13 +15,13 @@ import java.util.Date;
 public class StaffSkill extends ValueObject implements BaseStaffSkill {
     private long id;
     private String skillName;
-    private Date expiryDate;
+    private LocalDate expiryDate;
     private String levelOfSkill;
     private String staffId;
     private String notes;
 
     // Constructor
-    public StaffSkill(long id, String skillName, Date expiryDate, String levelOfSkill, String staffId, String notes) {
+    public StaffSkill(long id, String skillName, LocalDate expiryDate, String levelOfSkill, String staffId, String notes) {
         setId(id);
         setSkillName(skillName);
         setExpiryDate(expiryDate);
@@ -39,7 +39,7 @@ public class StaffSkill extends ValueObject implements BaseStaffSkill {
         return skillName;
     }
 
-    public Date expiryDate() {
+    public LocalDate expiryDate() {
         return expiryDate;
     }
 
@@ -67,8 +67,9 @@ public class StaffSkill extends ValueObject implements BaseStaffSkill {
         this.skillName = skillName;
     }
 
-    private void setExpiryDate(Date expiryDate) {
-        this.expiryDate = expiryDate != null ? expiryDate : new Date();
+    private void setExpiryDate(LocalDate expiryDate) {
+
+        this.expiryDate = expiryDate != null ? expiryDate : LocalDate.now();
     }
 
     private void setLevelOfSkill(String levelOfSkill) {

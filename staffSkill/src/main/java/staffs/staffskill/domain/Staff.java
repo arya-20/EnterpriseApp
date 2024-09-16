@@ -71,4 +71,12 @@ public class Staff extends Entity {
 
         return String.format("\nStaff: %s, Name: %s, Manager ID: %s, Role: %s, Staff Skills: \n[%s]", id(), fullName, managerId, role, staffSkillsAsString);
     }
+
+    public void updateDetails(String fullName, String managerId, String role, List<BaseStaffSkill> staffSkills) {
+        this.fullName = fullName;
+        this.managerId = managerId;
+        this.role = role;
+        this.staffSkills = staffSkills;
+    }
+
 }

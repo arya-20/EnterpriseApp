@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import staffs.staffskill.api.BaseStaffSkillValueObject;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity(name="staff_skill")//Needed for custom queries
@@ -29,7 +30,7 @@ public class StaffSkill implements BaseStaffSkillValueObject {
     private String name;
 
     @Column(name="expiry")
-    private Date expiry;
+    private LocalDate expiry;
 
     @Column(name = "level_of_skill")
     private String levelOfSkill;
