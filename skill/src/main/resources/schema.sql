@@ -1,6 +1,6 @@
 CREATE TABLE category (
                           category_id VARCHAR PRIMARY KEY,
-                          category_name VARCHAR NOT NULL
+                          category_name VARCHAR
 );
 
 CREATE TABLE skill(

@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 public class CreateSkillCommand {
     private String skillName;
-    private Category category;
+    private String category;
     private List<SkillDetail> skillDetail;
 
     @Override

@@ -1,22 +1,20 @@
 package staffs.skill.infrastructure;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import staffs.skill.api.BaseCategory;
-import staffs.skill.domain.Category;
+import staffs.skill.infrastructure.Category;
 
 import java.util.Optional;
 
 @Repository
-public interface CategoryRepository extends JpaRepository<Category, String> {
+public interface CategoryRepository extends CrudRepository<Category, String> {
 
-    @Query("SELECT c FROM category c")
-    Iterable<Category> findAllCategories();
+    @Query("FROM category")
+    Iterable<BaseCategory> findAllCategories();
 
     Optional<Category> findById(String id);
 
-    void deleteById(String id);
 
-    BaseCategory save(BaseCategory convert);
 }

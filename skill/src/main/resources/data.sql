@@ -3,6 +3,7 @@ VALUES ('c1', 'Programming'),
        ('c2', 'AI'),
        ('c3', 'Productivity');
 
+
 INSERT INTO skill (skill_id, skill_name, category_id)
         VALUES('s1', 'java', 'c1');
 INSERT INTO skill (skill_id, skill_name, category_id)

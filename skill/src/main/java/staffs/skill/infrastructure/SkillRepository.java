@@ -5,9 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import staffs.skill.domain.Category;
-import staffs.staffskill.api.BaseStaff;
 
-import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +22,9 @@ public interface SkillRepository extends CrudRepository<Skill, String> {
     // Find skill by ID
     Optional<Skill> findById(String id);
 
-    List<Skill> findByCategory(Category category);
+    List<Skill> findByCategory(String category);
+
+    void deleteById(String id);
+
 
 }

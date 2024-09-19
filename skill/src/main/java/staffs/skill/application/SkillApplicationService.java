@@ -32,7 +32,6 @@ public class SkillApplicationService {
         try {
             Identity idOfNewSkill = UniqueIDFactory.createID();
 
-            // Convert skill details from the command to a list of SkillDetail objects
             List<SkillDetail> skillDetails = command.getSkillDetail().stream()
                     .map(skillDetail -> new SkillDetail(
                             skillDetail.id(),
@@ -41,21 +40,15 @@ public class SkillApplicationService {
                     ))
                     .collect(Collectors.toList());
 
-            // Create the Skill aggregate
             Skill skill = Skill.skillOf(idOfNewSkill,
                     command.getSkillName(),
                     String.valueOf(command.getCategory()),
                     skillDetails);
 
-            // Convert the aggregate to the infrastructure entity and save it
             BaseSkill skillEntity = skillRepository.save(SkillDomainToInfrastructureConvertor.convert(skill));
-
-            // Convert back to the domain object to generate events if needed
             skill = SkillInfrastructureToDomainConvertor.convert(skillEntity);
+            publishNewSkillEvent(skill);
 
-            publishNewSkillEvent(skill); // Notify any subscribers
-
-            // Return the ID back to the controller
             return skill.id().toString();
         } catch (IllegalArgumentException e) {
             throw new SkillDomainException(e.getMessage());
@@ -109,7 +102,7 @@ public class SkillApplicationService {
     public void removeSkill(String skillId) throws SkillDomainException {
         Optional<staffs.skill.infrastructure.Skill> skill = skillRepository.findById(skillId);
         if (skill.isPresent()) {
-            skillRepository.deleteById(skillId); // Deletes the entity by its ID
+            skillRepository.deleteById(skillId);
         } else {
             throw new SkillDomainException("Skill not found");
         }

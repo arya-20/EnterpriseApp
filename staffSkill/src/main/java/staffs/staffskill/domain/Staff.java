@@ -29,6 +29,8 @@ public class Staff extends Entity {
 
         // Store event
         event = Optional.of(new StaffCreatedEvent(id.toString(), fullName, managerId, role, staffSkills));
+
+
     }
 
     public String fullName() {return fullName;}

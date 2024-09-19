@@ -18,7 +18,7 @@ public class StaffDomainToInfrastructureConverter {
                     staffSkillValueObject.expiryDate(),
                     staffSkillValueObject.levelOfSkill(),
                     staffSkillValueObject.notes(),
-                    staffSkillValueObject.staffId());
+                    staff.id().toString());
             s.addStaffSkill(staffSkill);
         }
         return s;

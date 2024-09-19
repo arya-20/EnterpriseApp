@@ -15,7 +15,6 @@ public class StaffSkillCustomSerializer extends JsonSerializer<StaffSkill> {
         jsonGenerator.writeStringField("id", String.valueOf(staffSkill.id())); // Convert long to String
         jsonGenerator.writeStringField("skillName", staffSkill.skillName());
         jsonGenerator.writeStringField("levelOfSkill", staffSkill.levelOfSkill());
-        jsonGenerator.writeStringField("staffId", staffSkill.staffId());
         jsonGenerator.writeStringField("notes", staffSkill.notes());
         jsonGenerator.writeEndObject();
     }

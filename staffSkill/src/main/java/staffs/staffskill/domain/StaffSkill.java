@@ -17,16 +17,14 @@ public class StaffSkill extends ValueObject implements BaseStaffSkill {
     private String skillName;
     private LocalDate expiryDate;
     private String levelOfSkill;
-    private String staffId;
     private String notes;
 
     // Constructor
-    public StaffSkill(long id, String skillName, LocalDate expiryDate, String levelOfSkill, String staffId, String notes) {
+    public StaffSkill(long id, String skillName, LocalDate expiryDate, String levelOfSkill, String notes) {
         setId(id);
         setSkillName(skillName);
         setExpiryDate(expiryDate);
         setLevelOfSkill(levelOfSkill);
-        setStaffId(staffId);
         setNotes(notes);
     }
 
@@ -49,10 +47,6 @@ public class StaffSkill extends ValueObject implements BaseStaffSkill {
 
     public String notes() {
         return notes;
-    }
-
-    public String staffId() {
-        return staffId;
     }
 
 
@@ -81,13 +75,9 @@ public class StaffSkill extends ValueObject implements BaseStaffSkill {
         this.notes = notes != null ? notes : "";
     }
 
-    private void setStaffId(String staffId) {
-        assertArgumentNotEmpty(staffId, "Staff ID cannot be empty");
-        this.staffId = staffId;
-    }
 
     public String toString() {
-        return String.format("id=%s, skillName=%s, expiryDate=%s, levelOfSkill=%s, staffId=%s, notes=%s",
-                id, skillName, expiryDate, levelOfSkill, staffId, notes);
+        return String.format("id=%s, skillName=%s, expiryDate=%s, levelOfSkill=%s, notes=%s",
+                id, skillName, expiryDate, levelOfSkill, notes);
     }
 }

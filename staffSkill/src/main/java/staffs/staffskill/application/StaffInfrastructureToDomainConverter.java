@@ -19,7 +19,6 @@ public class StaffInfrastructureToDomainConverter {
                     staffSkillValueObject.getName(),
                     staffSkillValueObject.getExpiry(),
                     staffSkillValueObject.getLevelOfSkill(),
-                    staffSkillValueObject.getStaff_id(),
                     staffSkillValueObject.getNotes()));
         }
 

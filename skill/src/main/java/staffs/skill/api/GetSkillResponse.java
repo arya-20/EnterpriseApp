@@ -3,6 +3,7 @@ package staffs.skill.api;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import staffs.skill.infrastructure.Category;
 
 @Getter
 @Setter
@@ -10,5 +11,5 @@ import lombok.Setter;
 public class GetSkillResponse {
     private String id;
     private String name;
-    private String category;
+    private Category category;
 }

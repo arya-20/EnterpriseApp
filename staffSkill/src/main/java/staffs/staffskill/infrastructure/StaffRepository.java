@@ -24,7 +24,4 @@ public interface StaffRepository extends CrudRepository<Staff, String> {
 
     List<BaseStaff> findByManagerId(String managerId);
 
-//    List<BaseStaffSkill> findByStaffSkillId (String id);
-
-
 }

@@ -10,4 +10,6 @@ import lombok.Setter;
 public class GetStaffResponse {
     private String staffId;
     private String name;
+    private String managerId;
+    private String role;
 }

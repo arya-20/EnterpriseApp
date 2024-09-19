@@ -13,7 +13,5 @@ public interface BaseStaffSkill {
 
     String levelOfSkill();
 
-    String staffId();
-
     String notes();
 }

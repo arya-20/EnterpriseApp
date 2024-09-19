@@ -32,8 +32,8 @@ public class StaffQueryHandler {
                 modelMapper.map(staff, GetStaffSkillResponse.class));
     }
 
-    public List<BaseStaffSkill> getStaffByStaffSkills(String id)  {
-        return staffSkillRepository.findByStaffSkill(id);
+    public List<BaseStaffSkill> getStaffByStaffSkills(String staffSkillId)  {
+        return staffSkillRepository.findByStaffSkill(staffSkillId);
     }
 
     public List<BaseStaff> getStaffByManagerId(String managerId) {

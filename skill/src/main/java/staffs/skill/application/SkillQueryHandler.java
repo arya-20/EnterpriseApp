@@ -27,15 +27,15 @@ public class SkillQueryHandler {
                 modelMapper.map(skill, GetSkillResponse.class));
     }
 
-    public List<Skill> getSkillsByCategory(Category category) {
-
-        return skillRepository.findByCategory(category);
-    }
-
+    public List<Skill> getSkillsByCategory(String category) {return skillRepository.findByCategory(category);}
 
     public Iterable<BaseSkill> getAllSkills() {
         return skillRepository.findAllSkills();
     }
+
+    public Iterable<BaseCategory> getAllCategories() {return categoryRepository.findAllCategories();
+    }
+
 
 
     public Optional<GetSkillDetailResponse> getSkillDetailResponse(String skillId) {

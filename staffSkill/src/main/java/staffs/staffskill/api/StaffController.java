@@ -30,7 +30,7 @@ public class StaffController {
     private StaffQueryHandler staffQueryHandler;
     private StaffApplicationService staffApplicationService;
 
-    // Get all staff members, e.g. http://localhost:8900/staff/all
+    // T Get all staff members, e.g. http://localhost:8900/staff/all
     @GetMapping(path = "/all")
     public ResponseEntity<?>  findAll(@RequestHeader("Authorization") String token) {
         try {
@@ -45,7 +45,7 @@ public class StaffController {
         return generateErrorResponse("user not authorised");
     }
 
-    // Get a specific staff member by ID, e.g. http://localhost:8900/staff/{staffId}
+    // T Get a specific staff member by ID, e.g. http://localhost:8900/staff/{staffId}
     @GetMapping(path = "/{staffId}")
     public ResponseEntity<?> findById(@PathVariable String staffId,
                                       @RequestHeader("Authorization") String token) {
@@ -65,7 +65,7 @@ public class StaffController {
         return generateErrorResponse("user not authorised");
     }
 
-    // Get a staff member allocated to manager ID, e.g. http://localhost:8900/staff/manager/{managerId}
+    //T Get a staff member allocated to manager ID, e.g. http://localhost:8900/staff/manager/{managerId}
     @GetMapping(path = "/manager/{managerId}")
     public ResponseEntity<?> findByManagerId(@PathVariable String managerId,
                                              @RequestHeader("Authorization") String token) {
@@ -80,8 +80,8 @@ public class StaffController {
         return generateErrorResponse("user not authorised");
     }
 
-    // Get all staff assigned to skill by id, http://localhost:8900/staff/{staffSkillId}
-    @GetMapping(path = "/staff/{staffSkillId}")
+    // Get all staff assigned to skill by skillid, http://localhost:8900/staff/staffSkill/{staffSkillId}
+    @GetMapping(path = "/staffSkill/{staffSkillId}")
     public ResponseEntity<?> findBySkillId(@PathVariable String staffSkillId,
                                            @RequestHeader("Authorization") String token) {
         try {
@@ -97,7 +97,7 @@ public class StaffController {
 
 
 
-    // Get all skills for a staff member by their ID, e.g. http://localhost:8900/staff/skills/{staffId}
+    //T Get all skills for a staff member by their ID, e.g. http://localhost:8900/staff/skills/{staffId}
     @GetMapping(path = "/skills/{staffId}")
     public ResponseEntity<?> findSkillByStaffId(@PathVariable String staffId,
                                                     @RequestHeader("Authorization") String token) {
@@ -120,14 +120,20 @@ public class StaffController {
     /** POST: Create a new staff member with skills, e.g.
      POST http://localhost:8900/staff
      {
-     "fullName": "Tony Stark",
+     "fullName": "John Terry",
      "managerId": "301",
      "role": "Software Engineer",
      "staffSkills": [
-     { "id": "5", "skillName": "Java Programming", "proficiencyLevel": "Advanced", "expiryDate": "2024-09-15", "levelOfSkill": "Expert", "notes": "..."}
+     {
+     "id": "5",
+     "skillName": "Java Programming",
+     "expiryDate": "2025-12-3",
+     "levelOfSkill": "Expert",
+     "staffId": "201",
+     "notes": "..."
+     }
      ]
      }
-
      **/
     @PostMapping
     public ResponseEntity<?> createStaffWithSkills(@RequestBody CreateStaffCommand command,

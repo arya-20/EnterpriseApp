@@ -1,26 +1,26 @@
 package staffs.skill.domain;
 
-import example.common.domain.Entity;
-import example.common.domain.Identity;
-import staffs.skill.api.events.CategoryCreatedEvent;
+import example.common.domain.ValueObject;
 
-import java.util.Optional;
-
-public class Category extends Entity {
+public class Category extends ValueObject {
     private String name;
+    private String id;
 
-    // Factory method
-    public static Category categoryOf(Identity id, String name) {
-        return new Category(id, name);
-    }
 
-    public Category(Identity id, String name) {
-        super(id);
+    public Category(String id, String name) {
+        setId(id);
         setName(name);
-        event = Optional.of((new CategoryCreatedEvent( id.toString(), name)));
     }
 
-    public String name() {return name;}
+
+    public String id() {return this.id;}
+
+    private void setId(String id) {
+        assertArgumentNotEmpty(id, "Category id cannot be empty");
+        this.id = id;
+    }
+
+    public String name() {return this.name;}
 
     private void setName(String name) {
         assertArgumentNotEmpty(name, "Category name cannot be empty");

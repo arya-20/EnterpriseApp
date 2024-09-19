@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import staffs.skill.api.BaseSkill;
-import staffs.skill.domain.Category;
 
 import java.util.ArrayList;
 import java.util.List;
