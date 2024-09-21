@@ -22,6 +22,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
@@ -185,11 +186,10 @@ public class StaffControllerTests {
     void test05() throws Exception {
         GetStaffSkillResponse staffSkillResponse = new GetStaffSkillResponse();
         staffSkillResponse.setStaffSkills(List.of(createValidStaffSkills()));
-        // Mock behavior
         when(identityService.isAdmin(MOCK_ADMIN_TOKEN)).thenReturn(true);
         when(staffQueryHandler.getStaffskill(VALID_STAFF_SKILL_ID)).thenReturn(Optional.of(staffSkillResponse));
 
-        //Check the format in generated_requests to ensure the json path keys are correct
+        //Check the format in generated_requests to ensure json path keys are correct
         mockMvc.perform(get(API_BASE_URL.concat("staffSkills/" + VALID_STAFF_SKILL_ID))
                         .header("Authorization", MOCK_ADMIN_TOKEN))
                 .andDo(print())
@@ -199,9 +199,6 @@ public class StaffControllerTests {
                 .andExpect(jsonPath("fullName", equalTo(staffSkillResponse.getFullName())));
 
     }
-
-
-
 
     @Test
     @DisplayName("Create a new staff member with skills and verify response")
@@ -299,7 +296,136 @@ public class StaffControllerTests {
 
         mockMvc.perform(delete(API_BASE_URL.concat("staff/" + VALID_STAFF_ID))
                         .header("Authorization", MOCK_ADMIN_TOKEN));
-                }
+    }
 
-    //invalid requests to each end point
+    @Test
+    @DisplayName("Invalid Staff ID - View particular staff member details")
+    void test09() throws Exception {
+        String invalidStaffId = "999999912";
+
+        when(identityService.isAdmin(MOCK_ADMIN_TOKEN)).thenReturn(true);
+        when(staffQueryHandler.getStaff(invalidStaffId)).thenReturn(Optional.empty());
+
+        mockMvc.perform(get(API_BASE_URL.concat(invalidStaffId))
+                        .header("Authorization", MOCK_ADMIN_TOKEN))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("Invalid Authorization Token - View all Staff")
+    void test10() throws Exception {
+        String invalidToken = "lkajdalijksajlksajdlksjdkasj";
+
+        when(identityService.isAdmin(invalidToken)).thenReturn(false);
+
+        mockMvc.perform(get(API_BASE_URL.concat("all"))
+                        .header("Authorization", invalidToken));
+
+    }
+
+    @Test
+    @DisplayName("Invalid Staff ID - View staff member skills")
+    void test11() throws Exception {
+        String invalidStaffId = "9939939939";
+
+        when(identityService.isAdmin(MOCK_ADMIN_TOKEN)).thenReturn(true);
+        when(staffQueryHandler.getStaffskill(invalidStaffId)).thenReturn(Optional.empty());
+
+        mockMvc.perform(get(API_BASE_URL.concat("skills/" + invalidStaffId))
+                        .header("Authorization", MOCK_ADMIN_TOKEN))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("Invalid Manager ID - View staff members by manager")
+    void test12() throws Exception {
+        String invalidManagerId = "99838383929";
+
+        when(identityService.isAdmin(MOCK_ADMIN_TOKEN)).thenReturn(true);
+        when(staffQueryHandler.getStaffByManagerId(invalidManagerId)).thenReturn(List.of());
+
+        mockMvc.perform(get(API_BASE_URL.concat("manager/" + invalidManagerId))
+                        .header("Authorization", MOCK_ADMIN_TOKEN));
+    }
+
+    @Test
+    @DisplayName("Invalid Skill ID - View staff members by skill")
+    void test13() throws Exception {
+        String invalidSkillId = "92922811";
+
+        when(identityService.isAdmin(MOCK_ADMIN_TOKEN)).thenReturn(true);
+        when(staffQueryHandler.getStaffskill(invalidSkillId)).thenReturn(Optional.empty());
+
+        mockMvc.perform(get(API_BASE_URL.concat("staffSkills/" + invalidSkillId))
+                        .header("Authorization", MOCK_ADMIN_TOKEN))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("Invalid create staff Request")
+    void test14() throws Exception {
+        String invalidStaffJson = "{"
+                + "\"fullName\":\"\","
+                + "}"; //invalid empty fields
+
+        when(identityService.isAdmin(MOCK_ADMIN_TOKEN)).thenReturn(true);
+
+        mockMvc.perform(post(API_BASE_URL)
+                        .header("Authorization", MOCK_ADMIN_TOKEN)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(invalidStaffJson))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("Invalid edit staff request")
+    void test15() throws Exception {
+        String invalidStaffId = "911111234445599";
+        String updatedStaffJson = "{"
+                + "\"fullName\":\"Updated Name\","
+                + "\"managerId\":\"301\","
+                + "\"role\":\"Updated Role\","
+                + "\"staffSkills\":[{\"skillName\":\"Updated Skill\", \"expiryDate\":\"2025-01-01\", \"levelOfSkill\":\"Expert\", \"notes\":\"Updated skill level.\"}]"
+                + "}";
+
+        when(identityService.isAdmin(MOCK_ADMIN_TOKEN)).thenReturn(true);
+        when(staffApplicationService.createStaffWithSkills(any(CreateStaffCommand.class))).thenReturn(null);
+
+        mockMvc.perform(put(API_BASE_URL.concat("staff/" + invalidStaffId))
+                        .header("Authorization", MOCK_ADMIN_TOKEN)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(updatedStaffJson))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("Invalid delete staff request")
+    void test16() throws Exception {
+        String invalidStaffId = "199010101019";
+
+        when(identityService.isAdmin(MOCK_ADMIN_TOKEN)).thenReturn(true);
+        doNothing().when(staffApplicationService).removeStaff(invalidStaffId);
+
+        mockMvc.perform(delete(API_BASE_URL.concat("staff/" + invalidStaffId))
+                        .header("Authorization", MOCK_ADMIN_TOKEN))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("Return 404 Not found for an invalid endpoint URL")
+    void test17() throws Exception {
+        when(identityService.isAdmin(MOCK_ADMIN_TOKEN)).thenReturn(true);
+
+        mockMvc.perform(get(API_BASE_URL.concat("invalid-endpoint"))
+                        .header("Authorization", MOCK_ADMIN_TOKEN))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
 }

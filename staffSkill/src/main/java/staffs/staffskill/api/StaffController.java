@@ -77,6 +77,7 @@ public class StaffController {
         } catch (JwtException jwtException) {
             return generateErrorResponse(jwtException.getMessage());
         }
+        catch (IllegalArgumentException iae) {}
         return generateErrorResponse("user not authorised");
     }
 

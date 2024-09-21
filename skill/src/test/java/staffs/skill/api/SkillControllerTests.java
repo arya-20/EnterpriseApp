@@ -240,4 +240,53 @@ public class SkillControllerTests {
                 .header("Authorization", MOCK_ADMIN_TOKEN));
     }
 
+    @Test
+    @DisplayName("Return 404 Not found for an invalid skill ID")
+    void test09() throws Exception {
+        when(identityService.isAdmin(MOCK_ADMIN_TOKEN)).thenReturn(true);
+        when(skillQueryHandler.getSkill("invalid-id")).thenReturn(Optional.empty());
+
+        mockMvc.perform(get(API_BASE_URL.concat("invalid-id"))
+                        .header("Authorization", MOCK_ADMIN_TOKEN))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("Return empty list when invalid category is provided")
+    void test10() throws Exception {
+        when(identityService.isAdmin(MOCK_ADMIN_TOKEN)).thenReturn(true);
+        when(skillQueryHandler.getSkillsByCategory("invalid-category")).thenReturn(new ArrayList<>());
+
+        mockMvc.perform(get(API_BASE_URL.concat("category/invalid-category"))
+                        .header("Authorization", MOCK_ADMIN_TOKEN))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$").isEmpty());
+    }
+
+    @Test
+    @DisplayName("Return 401 Unauthorized when no Authorization header is provided")
+    void test11() throws Exception {
+        mockMvc.perform(get(API_BASE_URL.concat(VALID_SKILL_ID)));
+        //and expect?
+    }
+
+    @Test
+    @DisplayName("Return 404 Not found for an invalid endpoint URL")
+    void test12() throws Exception {
+        when(identityService.isAdmin(MOCK_ADMIN_TOKEN)).thenReturn(true);
+
+        mockMvc.perform(get(API_BASE_URL.concat("invalid-endpoint"))
+                        .header("Authorization", MOCK_ADMIN_TOKEN))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+
+
+
+
+
 }

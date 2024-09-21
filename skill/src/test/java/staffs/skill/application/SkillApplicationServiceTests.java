@@ -37,7 +37,7 @@ public class SkillApplicationServiceTests {
 
     @Test
     @DisplayName("Should create a new skill with details and return the skill ID")
-    void testCreateSkillWithDetails() throws Exception {
+    void test01() throws Exception {
         CreateSkillCommand command = mock(CreateSkillCommand.class);
         when(command.getSkillName()).thenReturn("New Skill");
         when(command.getSkillCategory()).thenReturn("Category");
@@ -57,7 +57,7 @@ public class SkillApplicationServiceTests {
 
     @Test
     @DisplayName("Should update an existing skill with new details")
-    void testUpdateSkillWithDetails() throws Exception {
+    void test02() throws Exception {
         CreateSkillCommand command = mock(CreateSkillCommand.class);
         when(command.getSkillName()).thenReturn("Updated Skill");
         when(command.getSkillCategory()).thenReturn("Updated Category");
@@ -78,7 +78,7 @@ public class SkillApplicationServiceTests {
 
     @Test
     @DisplayName("Should throw SkillDomainException if skill not found during update")
-    void testUpdateSkillWithDetails_SkillNotFound() {
+    void test03() {
         CreateSkillCommand command = mock(CreateSkillCommand.class);
         when(skillRepository.findById("skillId")).thenReturn(Optional.empty());
 
@@ -89,7 +89,7 @@ public class SkillApplicationServiceTests {
 
     @Test
     @DisplayName("Should remove skill by ID if present")
-    void testRemoveSkill() throws SkillDomainException {
+    void test04() throws SkillDomainException {
         String skillId = "skillId";
         staffs.skill.infrastructure.Skill existingSkill = mock(staffs.skill.infrastructure.Skill.class);
 
@@ -100,7 +100,7 @@ public class SkillApplicationServiceTests {
 
     @Test
     @DisplayName("Should throw SkillDomainException if skill not found during removal")
-    void testRemoveSkill_SkillNotFound() {
+    void test05() {
         String skillId = "skillId";
 
         when(skillRepository.findById(skillId)).thenReturn(Optional.empty());
@@ -111,7 +111,7 @@ public class SkillApplicationServiceTests {
 
     @Test
     @DisplayName("Should publish new skill event after creation")
-    void testPublishNewSkillEvent() throws Exception {
+    void test06() throws Exception {
         Skill skill = mock(Skill.class);
         when(skill.getEvent()).thenReturn(Optional.of(mock(SkillCreatedEvent.class)));
         when(env.getProperty("rabbitmq.exchange")).thenReturn("exchange");
@@ -125,7 +125,7 @@ public class SkillApplicationServiceTests {
 
     @Test
     @DisplayName("Should throw SkillDomainException if new skill event not generated")
-    void testPublishNewSkillEvent_NoEventGenerated() {
+    void test07() {
         Skill skill = mock(Skill.class);
         when(skill.getEvent()).thenReturn(Optional.empty());
 

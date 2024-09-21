@@ -1,91 +1,467 @@
 @startuml
+package "Common" {
+    class JwtTokenUtil {
+            +static final long JWT_TOKEN_VALIDITY = 18000
+            -String secret
 
-package "Common Module" {
-    class JwtTokenUtil
-    class Address
-    class Entity
-    class Identity
-    class UniqueIDFactory
-    class AppUser
-    class Role
-    class RoleCustomSerializer
-    class ValueObject
-}
-
-package "Identity Module" {
-    class IdentityController
-    class UserDetailsRequest
-    class UserService
-    class IdentityApplication
-    class UserRepository
-}
-
-package "Skill Module" {
-    package "API" {
-    package "Events" {
-            class SkillCreatedEvent
-            class SkillCreatedListener
-            class SkillDetailCustomSerializer
+            +generateToken(userDetails: AppUser): String
+            -tokenFactory(claims: Map<String, Object>, subject: String): String
+            +getExpirationDateFromToken(token: String): Date
+            +getClaimFromToken(token: String, claimsResolver: Function<Claims, T>): T
+            -getAllClaimsFromToken(token: String): Claims
+            +isTokenExpired(token: String): Boolean
+            +getClaimFromToken(token: String, claim: String): String
+            -getSigningKey(): SecretKey
         }
-        class BaseCategory
-        class BaseSkill
-        class BaseSkillDetail
-        class BaseSkillDetailValueObject
-        class CreateCategoryCommand
-        class CreateSkillCommand
-        class GetCategoryResponse
-        class GetSkillDetailResponse
-        class GetSkillResponse
-        class SkillController
+
+    class Entity {
+        #id: String
+        +getId(): String
+    }
+
+    class Identity {
+            -String id
+            +Identity(String id)
+            +id(): String
+            +toString(): String
+            -setID(String id): void
+
+        }
+
+    class ValueObject {
+        }
+
+    class AssertionConcern {
+        +assertArgumentNotEmpty(Object o, String aMessage):
+        }
+        ValueObject --|> AssertionConcern : extends
+        Entity --|> AssertionConcern : extends
+        Identity --|> ValueObject : extends
+
+
+    class AppUser {
+        +id: String
+        +name: String
+        +roles: List<Role>
+    }
+
+    class Role {
+         +long id
+         +String type
+         +toString(): String
+    }
+
+         Role : <<Entity>>
+
+}
+
+package "Identity" {
+    class IdentityController {
+            -UserService userService
+
+            +validate(command: UserDetailsRequest): ResponseEntity<?>
+        }
+
+        IdentityController : <<Controller>>
+
+        IdentityController --> UserService : uses
+        IdentityController ..> UserDetailsRequest : receives
+        IdentityController ..> ResponseEntity : returns
+
+
+    class UserDetailsRequest {
+        +username: String
+        +password: String
+    }
+
+    class UserService {
+            -UserRepository userRepository
+            -JwtTokenUtil jwtTokenUtil
+
+            +authenticate(username: String, password: String): Optional<String>
+        }
+
+        UserService : <<Service>>
+        UserService --> UserRepository : uses
+        UserService --> JwtTokenUtil : uses
+        UserService ..> Optional : returns
+
+
+    class UserRepository {
+        +findByUsernameAndPassword(username: String, password: String): Optional<AppUser>
+
+        +save(user: AppUser): AppUser
+    }
+
+    IdentityController --> UserService : uses
+    UserService --> UserRepository : uses
+    UserService --> JwtTokenUtil : uses
+}
+
+package "Skill " {
+    package "API" {
+        package "Events" {
+            class SkillCreatedEvent {
+                -aggregateID: String
+                -skillName: String
+                -skillDetails: List
+            }
+        }
+
+        interface BaseSkill {
+                {abstract} +String getId()
+                {abstract} +String getName()
+                {abstract} +String getCategory()
+                {abstract} +List<SkillDetail> getSkillDetails()
+                {abstract} +void addSkillDetail(SkillDetail skillDetail)
+        }
+
+
+        interface BaseSkillDetailValueObject {
+               +long getId()
+               +String getName()
+               +String getProficiencyLevel()
+               +String getSkill_id()
+        }
+
+
+        class CreateSkillCommand {
+               -String skillName
+               -String SkillCategory
+               -List<SkillDetail> skillDetails
+
+               +CreateSkillCommand(String skillName, String SkillCategory, List<SkillDetail> skillDetails)
+               +String toString()
+               }
+
+
+
+        class GetSkillDetailResponse {
+            -id: String
+            -name: String
+            -category: String
+            -BaseSkillDetailValueObject: skillDetails
+            }
+                GetSkillDetailResponse --> BaseSkillDetailValueObject : contains 0..* >
+
+
+        class GetSkillResponse {
+            -id: String
+            -name: String
+            -category: String
+        }
+
+        class SkillController {
+                -SkillIdentityService identityService
+                -SkillQueryHandler skillQueryHandler
+                -SkillApplicationService skillApplicationService
+
+                +ResponseEntity: findAll(String token)
+                +ResponseEntity: findById(String skillId, String token)
+                +ResponseEntity: getSkillsByCategory(String category, String token)
+                +ResponseEntity: findSkillDetailBySkillId(String skillId, String token)
+                +ResponseEntity: createSkillWithDetails(CreateSkillCommand command, String token)
+                +ResponseEntity: updateSkillWithDetails(String skillId, CreateSkillCommand command, String token)
+                +ResponseEntity: deleteSkill(String skillId, String token)
+                -ResponseEntity: generateErrorResponse(String message)
+            }
+
+
     }
 
     package "Application" {
-        class InvalidSkillDetailException
-        class SkillApplicationService
-        class SkillDomainException
-        class SkillDomainToInfra
-        class SkillInfraToDomain
-        class SkillIdentityService
-        class SkillNotFoundException
-        class SkillQueryHandler
-        class UserDTO
+
+        class SkillApplicationService {
+               -SkillRepository skillRepository
+               -Environment env
+               -RabbitTemplate sender
+               -Logger LOG
+
+               +String createSkillWithDetails(CreateSkillCommand command) throws SkillDomainException
+               +String updateSkillWithDetails(String skillId, CreateSkillCommand command) throws SkillDomainException
+               +void publishNewSkillEvent(Skill skill) throws SkillDomainException
+               +void removeSkill(String skillId) throws SkillDomainException
+           }
+           SkillController --> SkillApplicationService : uses 1..1>
+
+
+
+        class SkillIdentityService {
+                -JwtTokenUtil jwtTokenUtil
+
+                +boolean isSpecifiedUser(String token, String id) throws JwtException
+                +boolean isAdmin(String token) throws JwtException
+                +void checkIfTokenHasExpired(String token) throws JwtException
+                +UserDTO getDetailsFromToken(String token)
+            }
+
+            SkillController --> SkillIdentityService :  uses 1..1  >
+            SkillIdentityService --> JwtTokenUtil : uses >
+
+
+
+        class SkillQueryHandler {
+                -SkillRepository skillRepository
+                -ModelMapper modelMapper
+
+                +Optional<GetSkillResponse> getSkill(String skillId)
+                +Optional<GetSkillDetailResponse> getSkillDetail(String skillId)
+                +List<Skill> getSkillsByCategory(String category)
+                +Iterable<BaseSkill> getAllSkills()
+            }
+
+            SkillController --> SkillQueryHandler : uses 1..1>
+
+        class UserDTO {
+            +username: String
+            +roles: List<String>
+        }
+
     }
 
     package "Domain" {
-        class Category
-        class Skill
-        class SkillDetail
+        class Skill {
+            -List<SkillDetail> skillDetails
+            -String name
+            -String category
+
+            +String name()
+            +String category()
+            +List<SkillDetail> skillDetails()
+            +boolean findSkillDetail(long skillDetailId)
+            +String toString()
+            +void updateDetails(String skillName, String category, List<SkillDetail> skillDetails)
+        }
+
+
+        class SkillDetail {
+            -long id
+            -String name
+            -String proficiencyLevel
+
+            +long id()
+            +String name()
+            +String proficiencyLevel()
+            +String toString()
+        }
+                Skill --> SkillDetail : contains 0..* >
+                CreateSkillCommand --> SkillDetail : contains 0..* >
+                BaseSkill --> SkillDetail : uses
+
+
+
     }
 
     package "Infrastructure" {
-        class CategoryRepository
-        class SkillRepository
-        class SkillDetailRepository
+        class Skill {
+            -String id
+            -String name
+            -String category
+            -List<SkillDetail> skillDetails
+
+            +void addSkillDetail(SkillDetail skillDetail)
+            +static Skill skillOf(String id, String name, String category)
+        }
+
+        class SkillDetail {
+            -long id
+            -String name
+            -String proficiencyLevel
+            -String skill_id
+
+            +long id()
+            +String name()
+            +String proficiencyLevel()
+        }
+
+        class SkillRepository {
+            +Iterable<BaseSkill> findAllSkills()
+            +<S extends BaseSkill> S save(S skill)
+            +Optional<Skill> findById(String id)
+            +List<Skill> findByCategory(String category)
+            +void deleteById(String id)
+            }
+
+        Skill "1" --> "0..*" SkillDetail : contains >
+        SkillRepository "1" --> "0..*" Skill : manages >
+        SkillApplicationService --> SkillRepository : uses >
+        SkillQueryHandler --> SkillRepository : uses
+        Skill "1" --> "0..1" SkillCreatedEvent : triggers >
+
+
+
     }
 }
 
-package "StaffSkill Module" {
+package "StaffSkill" {
     package "API" {
-    package "Events" {
-                class StaffCreatedEvent
-                class StaffCreatedListener
-                class StaffSkillCustomSerializer
+        package "Events" {
+            class StaffCreatedEvent {
+               -String aggregateID
+                       -String staffName
+                       -String managerId
+                       -String role
+                       -List<BaseStaffSkill> staffSkills
             }
-        class StaffController
-        class StaffSkill
-    }
+        }
+
+        class CreateStaffCommand {
+                -String fullName
+                -String managerId
+                -String role
+                -List<StaffSkill> staffSkills
+
+                +String toString()
+            }
+
+            class GetStaffResponse {
+                -String staffId
+                -String name
+                -String managerId
+                -String role
+            }
+
+            class GetStaffResponseToSkill {
+                -String staffId
+                -String fullName
+            }
+
+            class GetStaffSkillResponse {
+                -String staffId
+                -String fullName
+                -String managerId
+                -String role
+                -List<BaseStaffSkillValueObject> staffSkills
+            }
+
+            class StaffController {
+                +ResponseEntity<?> findAll(String token)
+                +ResponseEntity<?> findById(String staffId, String token)
+                +ResponseEntity<?> findByManagerId(String managerId, String token)
+                +ResponseEntity<?> findBySkillId(String staffSkillId, String token)
+                +ResponseEntity<?> findSkillByStaffId(String staffId, String token)
+                +ResponseEntity<?> createStaffWithSkills(CreateStaffCommand command, String token)
+                +ResponseEntity<?> updateStaffWithDetails(String staffId, CreateStaffCommand command, String token)
+                +ResponseEntity<?> removeStaff(String staffId, String token)
+            }
+
+            StaffController "1" --> "0..*" GetStaffResponse : returns >
+            StaffController "1" --> "0..*" GetStaffResponseToSkill : returns >
+            StaffController "1" --> "0..*" GetStaffSkillResponse : returns >
+            StaffController "1" --> "0..*" StaffCreatedEvent : triggers >
+        }
 
     package "Application" {
-        class StaffApplicationService
-        class StaffDomainException
-        class StaffQueryHandler
-    }
+        class IdentityService {
+                - jwtTokenUtil: JwtTokenUtil
+                + isSpecifiedUser(token: String, id: String): boolean
+                + isAdmin(token: String): boolean
+                + checkIfTokenHasExpired(token: String): void
+                + getDetailsFromToken(token: String): UserDTO
+            }
+
+            class StaffApplicationService {
+                - staffRepository: StaffRepository
+                - env: Environment
+                - sender: RabbitTemplate
+                - LOG: Logger
+                + createStaffWithSkills(command: CreateStaffCommand): String
+                + updateStaffWithDetails(staffId: String, command: CreateStaffCommand): String
+                + publishNewStaffEvent(staff: Staff): void
+                + removeStaff(staffId: String): void
+            }
+
+            class StaffQueryHandler {
+                - staffSkillRepository: StaffSkillRepository
+                - staffRepository: StaffRepository
+                - modelMapper: ModelMapper
+                + getStaff(staffId: String): Optional<GetStaffResponse>
+                + getAllStaff(): Iterable<BaseStaff>
+                + getStaffskill(staffId: String): Optional<GetStaffSkillResponse>
+                + getStaffByStaffSkills(staffSkillId: String): List<BaseStaffSkill>
+                + getStaffByManagerId(managerId: String): List<BaseStaff>
+            }
+
+            IdentityService --> JwtTokenUtil
+
+        }
+
+
+    package "Domain" {
+        class Staff {
+                - staffSkills: List<BaseStaffSkill>
+                - fullName: String
+                - managerId: String
+                - role: String
+                + staffOf(id: Identity, fullName: String, managerId: String, role: String, staffSkills: List<BaseStaffSkill>): Staff
+                + fullName(): String
+                + managerId(): String
+                + role(): String
+                + staffSkills(): List<BaseStaffSkill>
+                + findStaffSkill(staffSkillId: long): boolean
+                + toString(): String
+                + updateDetails(fullName: String, managerId: String, role: String, staffSkills: List<BaseStaffSkill>): void
+            }
+
+            class StaffSkill {
+                - id: long
+                - skillName: String
+                - expiryDate: LocalDate
+                - levelOfSkill: String
+                - notes: String
+                + StaffSkill(id: long, skillName: String, expiryDate: LocalDate, levelOfSkill: String, notes: String)
+                + id(): long
+                + skillName(): String
+                + expiryDate(): LocalDate
+                + levelOfSkill(): String
+                + notes(): String
+                + toString(): String
+            }
+
+            Staff "1" --> "0..*" StaffSkill : has >
+
+        }
 
     package "Infrastructure" {
-        class Staff
-        class StaffRepository
-        class StaffSkillRepository
-    }
+        class Staff {
+                - id: String
+                - fullName: String
+                - managerId: String
+                - role: String
+                - staffSkills: List<StaffSkill>
+                + addStaffSkill(staffSkill: StaffSkill): void
+                + staffOf(id: String, fullName: String, managerId: String, role: String): Staff
+            }
+
+            class StaffRepository {
+                + findAllStaff(): Iterable<BaseStaff>
+                + save(skill: S): S
+                + findById(id: String): Optional<Staff>
+                + findByManagerId(managerId: String): List<BaseStaff>
+            }
+
+            class StaffSkill {
+                - id: long
+                - name: String
+                - expiry: LocalDate
+                - levelOfSkill: String
+                - notes: String
+                - staff_id: String
+            }
+
+            class StaffSkillRepository {
+                + findByStaffSkill(id: String): List<BaseStaffSkill>
+            }
+
+            Staff <--> StaffSkill
+            Staff "1" --> "0..*" StaffSkill : contains >
+
+            StaffRepository --> Staff
+            StaffSkillRepository --> StaffSkill
+            StaffApplicationService --> StaffRepository
+            StaffQueryHandler --> StaffRepository
+            StaffQueryHandler --> StaffSkillRepository
+        }
 }
 
 @enduml

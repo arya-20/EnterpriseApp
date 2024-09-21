@@ -5,6 +5,7 @@ import org.junit.platform.suite.api.Suite;
 
 @Suite
 @SelectClasses( {AddressTests.class,
-                IdentityTests.class})
+                IdentityTests.class,
+                EntityTests.class})
 public class TestSuite {
 }

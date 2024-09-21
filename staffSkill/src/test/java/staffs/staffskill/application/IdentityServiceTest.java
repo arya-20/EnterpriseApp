@@ -23,7 +23,7 @@ public class IdentityServiceTest {
 
     @Test
     @DisplayName("Should return true if token belongs to specified user")
-    void testIsSpecifiedUser() {
+    void test01() {
         //checks if userid matches expected id
         String token = "valid";
         String userId = "1";
@@ -36,7 +36,7 @@ public class IdentityServiceTest {
 
     @Test
     @DisplayName("Should return false if token does not belong to specified user")
-    void testIsSpecifiedUser_Invalid() {
+    void test02() {
         //return false if token doesnt match
         String token = "valid";
         String userId = "1";
@@ -49,7 +49,7 @@ public class IdentityServiceTest {
 
     @Test
     @DisplayName("Should throw JwtException if token is expired")
-    void testIsSpecifiedUser_TokenExpired() {
+    void test03() {
         String token = "expiredToken";
 
         when(jwtTokenUtil.isTokenExpired(token)).thenReturn(true);
@@ -61,7 +61,7 @@ public class IdentityServiceTest {
 
     @Test
     @DisplayName("Should return true if user is admin")
-    void testIsAdmin() {
+    void test04() {
         String token = "validToken";
         String role = "{key=ADMIN}";
 
@@ -73,7 +73,7 @@ public class IdentityServiceTest {
 
     @Test
     @DisplayName("Should return false if user is not admin")
-    void testIsAdmin_NotAdmin() {
+    void test05() {
         String token = "validToken";
         String role = "{key=USER}";
 
@@ -85,7 +85,7 @@ public class IdentityServiceTest {
 
     @Test
     @DisplayName("Should throw JwtException if admin token is expired")
-    void testIsAdmin_TokenExpired() {
+    void test06() {
         String token = "expiredToken";
 
         when(jwtTokenUtil.isTokenExpired(token)).thenReturn(true);
@@ -97,7 +97,7 @@ public class IdentityServiceTest {
 
     @Test
     @DisplayName("Should retrieve user details from token")
-    void testGetDetailsFromToken() {
+    void test07() {
         String token = "validToken";
 
         when(jwtTokenUtil.getClaimFromToken(token, UserDTO.ID)).thenReturn("1");
