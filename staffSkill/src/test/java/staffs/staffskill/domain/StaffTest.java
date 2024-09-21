@@ -1,7 +1,6 @@
 package staffs.staffskill.domain;
 
 import example.common.domain.Identity;
-import example.common.domain.Money;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import staffs.staffskill.api.BaseStaffSkill;

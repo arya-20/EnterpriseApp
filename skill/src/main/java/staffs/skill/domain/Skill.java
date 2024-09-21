@@ -57,6 +57,7 @@ public class Skill extends Entity {
                 .map(Object::toString)
                 .collect(Collectors.joining("\n"));
 
+
         return String.format("\nSkill: %s, Name: %s, skill details \n[%s]", id(), name, skillDetailsAsString);
     }
 
@@ -65,6 +66,4 @@ public class Skill extends Entity {
         this.category = category;
         this.skillDetails = skillDetails;
     }
-
-
 }

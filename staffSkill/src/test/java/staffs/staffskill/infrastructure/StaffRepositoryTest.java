@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @SpringJUnitConfig
-class StaffRepositoryTest {
+public class StaffRepositoryTest {
 
     @Autowired
     private StaffRepository staffRepository;

@@ -10,13 +10,13 @@
         <module name="common" />
         <module name="staffSkill" />
         <module name="identity" />
-        <module name="restaurant" />
         <module name="skill" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="master" target="21" />
       <module name="order" target="21" />
+      <module name="restaurant" target="21" />
       <module name="staff" target="1.8" />
     </bytecodeTargetLevel>
   </component>

@@ -1,0 +1,91 @@
+@startuml
+
+package "Common Module" {
+    class JwtTokenUtil
+    class Address
+    class Entity
+    class Identity
+    class UniqueIDFactory
+    class AppUser
+    class Role
+    class RoleCustomSerializer
+    class ValueObject
+}
+
+package "Identity Module" {
+    class IdentityController
+    class UserDetailsRequest
+    class UserService
+    class IdentityApplication
+    class UserRepository
+}
+
+package "Skill Module" {
+    package "API" {
+    package "Events" {
+            class SkillCreatedEvent
+            class SkillCreatedListener
+            class SkillDetailCustomSerializer
+        }
+        class BaseCategory
+        class BaseSkill
+        class BaseSkillDetail
+        class BaseSkillDetailValueObject
+        class CreateCategoryCommand
+        class CreateSkillCommand
+        class GetCategoryResponse
+        class GetSkillDetailResponse
+        class GetSkillResponse
+        class SkillController
+    }
+
+    package "Application" {
+        class InvalidSkillDetailException
+        class SkillApplicationService
+        class SkillDomainException
+        class SkillDomainToInfra
+        class SkillInfraToDomain
+        class SkillIdentityService
+        class SkillNotFoundException
+        class SkillQueryHandler
+        class UserDTO
+    }
+
+    package "Domain" {
+        class Category
+        class Skill
+        class SkillDetail
+    }
+
+    package "Infrastructure" {
+        class CategoryRepository
+        class SkillRepository
+        class SkillDetailRepository
+    }
+}
+
+package "StaffSkill Module" {
+    package "API" {
+    package "Events" {
+                class StaffCreatedEvent
+                class StaffCreatedListener
+                class StaffSkillCustomSerializer
+            }
+        class StaffController
+        class StaffSkill
+    }
+
+    package "Application" {
+        class StaffApplicationService
+        class StaffDomainException
+        class StaffQueryHandler
+    }
+
+    package "Infrastructure" {
+        class Staff
+        class StaffRepository
+        class StaffSkillRepository
+    }
+}
+
+@enduml

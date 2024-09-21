@@ -46,7 +46,7 @@ public class StaffControllerTests {
 
     private Staff createValidStaffWithSkills(){
         List<BaseStaffSkill> staffSkills = new ArrayList<>();
-        Staff staff =  Staff.staffOf(VALID_STAFF_ID,"John Lol", "301", "Software Engineer") ;
+        Staff staff =  Staff.staffOf(VALID_STAFF_ID,"Test Lol", "301", "Software Engineer") ;
         staff.addStaffSkill(createValidStaffSkills());
         return staff;
     }
@@ -157,7 +157,7 @@ public class StaffControllerTests {
 
     @Test
     @DisplayName("Pass a valid manager ID to view staff members allocated to that manager, display the response in JSON")
-    void testFindByManagerIdForOneStaff() throws Exception {
+    void test04() throws Exception {
         BaseStaff staff = createValidStaffWithSkills();
 
         // Mock behavior
@@ -182,7 +182,7 @@ public class StaffControllerTests {
 
     @Test
     @DisplayName("Pass a valid skill ID to view all staff members assigned to that skill, display the response in JSON")
-    void testFindBySkillId() throws Exception {
+    void test05() throws Exception {
         GetStaffSkillResponse staffSkillResponse = new GetStaffSkillResponse();
         staffSkillResponse.setStaffSkills(List.of(createValidStaffSkills()));
         // Mock behavior
@@ -205,7 +205,7 @@ public class StaffControllerTests {
 
     @Test
     @DisplayName("Create a new staff member with skills and verify response")
-    void testCreateStaffWithSkills() throws Exception {
+    void test06() throws Exception {
         List<staffs.staffskill.domain.StaffSkill> staffSkills = List.of();
         CreateStaffCommand command = new CreateStaffCommand(
                 "Charles Leclerc",
@@ -217,8 +217,7 @@ public class StaffControllerTests {
         when(identityService.isAdmin(MOCK_ADMIN_TOKEN)).thenReturn(true);
         when(staffApplicationService.createStaffWithSkills(command)).thenReturn(VALID_STAFF_ID);
 
-        // Act & Assert
-        mockMvc.perform(post(API_BASE_URL.concat("newEmployee"))
+        mockMvc.perform(post(API_BASE_URL)
                         .header("Authorization", MOCK_ADMIN_TOKEN)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"fullName\":\"" + command.getFullName() + "\","
@@ -235,7 +234,7 @@ public class StaffControllerTests {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.employee_Id").value(VALID_STAFF_ID))
+                .andExpect(jsonPath("$.id").value(VALID_STAFF_ID))
                 .andExpect(jsonPath("$.full_Name", equalTo(command.getFullName())))
                 .andExpect(jsonPath("$.manager_Id", equalTo(command.getManagerId())))
                 .andExpect(jsonPath("$.role", equalTo(command.getRole())))
@@ -253,7 +252,7 @@ public class StaffControllerTests {
 
     @Test
     @DisplayName("Edit a staff member with skills and verify response")
-    void testUpdateStaffWithSkills() throws Exception {
+    void test07() throws Exception {
         List<staffs.staffskill.domain.StaffSkill> staffSkills = List.of();
         CreateStaffCommand command = new CreateStaffCommand(
                     VALID_STAFF_ID,
@@ -293,7 +292,7 @@ public class StaffControllerTests {
 
     @Test
     @DisplayName("Remove a staff member with skills and verify response")
-    void testRemoveStaffWithSkills() throws Exception {
+    void test08() throws Exception {
         when(identityService.isAdmin(MOCK_ADMIN_TOKEN)).thenReturn(true);
 
         doNothing().when(staffApplicationService).removeStaff(VALID_STAFF_ID);

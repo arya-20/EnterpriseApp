@@ -2,20 +2,24 @@ package staffs.skill.api;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import staffs.skill.domain.Category;
 import staffs.skill.domain.SkillDetail;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter // Needed for JSON serialization
 @AllArgsConstructor
 public class CreateSkillCommand {
     private String skillName;
-    private String category;
-    private List<SkillDetail> skillDetail;
+    private String SkillCategory;
+    private List<SkillDetail> skillDetails;
 
-    @Override
     public String toString() {
-        return String.format("Skill name: %s, Category: %s", skillName, category);
+        String skillDetailAsString = skillDetails.stream()
+                .map(Object::toString)
+                .collect(Collectors.joining("\n"));
+
+
+        return String.format("\nSkill name: %s, \nCategory: %s, \nSkill details: %s", skillName, SkillCategory, skillDetailAsString);
     }
 }

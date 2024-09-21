@@ -10,7 +10,9 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class GetSkillDetailResponse {
-    private String skillId;
+    private String id;
     private String name;
+    private String category;
     private List<BaseSkillDetailValueObject> skillDetails;
+
 }

@@ -13,9 +13,7 @@ import java.util.Optional;
 public interface StaffSkillRepository extends CrudRepository<StaffSkill, String> {
     // Used in application service to avoid coupling of api to infrastructure layer
     @Query("FROM staff_skill ")
-    Iterable<BaseStaffSkill> findAllStaffSkills();
 
-    <S extends BaseStaffSkill> S save(S staffSkill);
 
 
     List<BaseStaffSkill> findByStaffSkill (String id);

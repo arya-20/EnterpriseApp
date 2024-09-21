@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import staffs.skill.domain.Category;
 import staffs.skill.infrastructure.Skill;
 
 import java.util.List;
@@ -37,21 +36,6 @@ public class SkillController {
         return generateErrorResponse("user not authorised");
     }
 
-    // e.g. http://localhost:8080/skill/categories
-    @GetMapping(path = "/categories")
-    public ResponseEntity<?> findAllCategories(@RequestHeader("Authorization") String token) {
-        try {
-            if (identityService.isAdmin(token)) {
-                return ResponseEntity.ok().body(skillQueryHandler.getAllCategories());
-            }
-        } catch (JwtException jwtException) {
-            return generateErrorResponse(jwtException.getMessage());
-
-        } catch (IllegalArgumentException iae) {
-        }
-        return generateErrorResponse("user not authorised");
-    }
-
 
     // e.g. http://localhost:8080/skills/s1
     @GetMapping(path = "/{skillId}")
@@ -67,18 +51,17 @@ public class SkillController {
             }
         } catch (JwtException jwtException) {
             return generateErrorResponse(jwtException.getMessage());
-        } catch (IllegalArgumentException iae) {
-        }
+        } catch (IllegalArgumentException iae) {}
         return generateErrorResponse("user not authorised");
     }
 
-    // view all skills in a category e.g. http://localhost:8080/skills/category/{categoryId}
-    @GetMapping(path = "/category/{categoryId}")
-    public ResponseEntity<?> getSkillsByCategory(@PathVariable String categoryId,
+    // view all skills in a category e.g. http://localhost:8080/skills/category/{category}
+    @GetMapping(path = "category/{category}")
+    public ResponseEntity<?> getSkillsByCategory(@PathVariable String category,
                                              @RequestHeader("Authorization") String token) {
         try {
-            if (identityService.isAdmin(token) || identityService.isSpecifiedUser(token, String.valueOf(categoryId))) {
-                List<Skill> skillList = skillQueryHandler.getSkillsByCategory(String.valueOf(categoryId));
+            if (identityService.isAdmin(token) || identityService.isSpecifiedUser(token, String.valueOf(category))) {
+                List<Skill> skillList = skillQueryHandler.getSkillsByCategory(String.valueOf(category));
                 return ResponseEntity.ok(skillList);
             }
         } catch (JwtException jwtException) {
@@ -95,7 +78,7 @@ public class SkillController {
             //Valid user or ADMIN?
             if (identityService.isAdmin(token) ||
                     identityService.isSpecifiedUser(token, skillId)) {
-                return skillQueryHandler.getSkillDetailResponse(skillId).map(
+                return skillQueryHandler.getSkillDetail(skillId).map(
                                 o -> new ResponseEntity<>(o, HttpStatus.OK))
                         .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
             }
@@ -107,20 +90,19 @@ public class SkillController {
     }
 
     // e.g. POST http://localhost:8080/skills
-
     /**
-     {
-     "skillName": "New Skill Name",
-     "category": "c1",
-     "skillDetail": [
-     {
-     "skillName": "java",
-     "proficiencyLevel": "strong"
-     }
-     ]
-     }
-
-     **/
+    {
+        "skillName": "Java",
+            "SkillCategory": "tech",
+            "skillDetails": [
+        {
+            "id": "6",
+                "name": "java",
+                "proficiencyLevel": "expert"
+        }
+    ]
+    }
+**/
     @PostMapping
     public ResponseEntity<?> createSkillWithDetails(@RequestBody CreateSkillCommand command,
                                                     @RequestHeader("Authorization") String token) {

@@ -2,13 +2,11 @@ package staffs.staffskill.api.events;
 
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import example.common.domain.Money;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
 import staffs.staffskill.api.BaseStaffSkill;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @AllArgsConstructor
 @Setter

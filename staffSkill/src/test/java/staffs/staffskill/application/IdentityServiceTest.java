@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class IdentityServiceTest {
+public class IdentityServiceTest {
 
     private JwtTokenUtil jwtTokenUtil;
     private IdentityService identityService;

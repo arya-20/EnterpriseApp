@@ -18,6 +18,7 @@
       <set>
         <option value="$PROJECT_DIR$/master/pom.xml" />
         <option value="$PROJECT_DIR$/order/pom.xml" />
+        <option value="$PROJECT_DIR$/restaurant/pom.xml" />
         <option value="$PROJECT_DIR$/staff/pom.xml" />
       </set>
     </option>

@@ -11,7 +11,6 @@ import staffs.skill.api.events.SkillDetailCustomSerializer;
 @EqualsAndHashCode(callSuper = false)
 @Setter
 @NoArgsConstructor
-@JsonSerialize(using = SkillDetailCustomSerializer.class)
 public class SkillDetail extends ValueObject implements BaseSkillDetail {
     private long id;
     private String name;
@@ -45,6 +44,6 @@ public class SkillDetail extends ValueObject implements BaseSkillDetail {
     }
 
     public String toString() {
-        return String.format("id=%s, name=%s, proficiencyLevel=%s", id, name, proficiencyLevel);
+        return String.format("id=%s, name=%s, proficiencyLevel=%s", id(), name, proficiencyLevel);
     }
 }

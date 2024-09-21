@@ -34,7 +34,7 @@ public class Skill implements BaseSkill {
     protected Skill(String id, String name, String category) {
         this.id = id;
         this.name = name;
-        this.category = String.valueOf(category);
+        this.category = category;
         this.skillDetails = new ArrayList<>();
     }
 
